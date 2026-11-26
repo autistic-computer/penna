@@ -1,6 +1,6 @@
 use ala::{
     AnyView, App, AppContext as _, Context, Entity, Hsla, IntoElement, MouseButton,
-    ParentElement as _, Render, SharedString, Styled as _, Subscription, Window, div, px,
+    ParentElement as _, Render, SharedString, Styled as _, Window, div, px,
 };
 use penna::{
     ActiveTheme as _, Colorize as _, Disableable as _, Sizable as _, Size, Space, StyledExt as _,
@@ -9,7 +9,7 @@ use penna::{
     h_flex, parse_hex,
 };
 
-use super::support::{Probe, hover, press, when_visible};
+use super::support::{Probe, click, when_visible};
 use crate::story::{Section, Story, states};
 
 pub const STORY: Story = Story {
@@ -138,7 +138,6 @@ impl Render for Pickers {
 struct Open {
     state: Entity<ColorPickerState>,
     trigger: Probe,
-    _bounds: Subscription,
 }
 
 impl Open {
@@ -148,16 +147,9 @@ impl Open {
         let trigger = Probe::default();
         let probe = trigger.clone();
         when_visible(&trigger, window, move |window, cx| {
-            press(&probe, MouseButton::Left, window, cx);
+            click(&probe, MouseButton::Left, window, cx);
         });
-        cx.new(|cx| Self {
-            state,
-            trigger,
-            _bounds: cx.observe_window_bounds(window, |this: &mut Self, window, cx| {
-                hover(&this.trigger, window, cx);
-            }),
-        })
-        .into()
+        cx.new(|_| Self { state, trigger }).into()
     }
 }
 

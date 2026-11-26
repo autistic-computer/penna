@@ -59,5 +59,5 @@ Steps::new(["Allow", "Find", "Place"])
 | `Steps::new(labels)` | `.penna-steps[role="list"]` | Horizontal step indicator |
 | `.id(...)` | `role="listitem"` per `.penna-step` | Accessible list semantics |
 | `.current(index)` | `data-place="done" \| "current" \| "later"` | Step progression state |
-| — | `.penna-step-line[data-penna="step"]` | 28 × 2 px connector (`data-tone="primary"` when reached) |
-| — | `.penna-step-dot[data-penna="step"]` | 20 px badge (`check` icon when done) |
+| - | `.penna-step-line[data-penna="step"]` | 28 × 2 px connector (`data-tone="primary"` when reached) |
+| - | `.penna-step-dot[data-penna="step"]` | 20 px badge (`check` icon when done) |

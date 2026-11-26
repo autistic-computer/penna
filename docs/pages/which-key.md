@@ -1,6 +1,6 @@
 # Which-key
 
-A passive shortcut cheat sheet that appears after a prefix chord to show the next available bindings grouped by topic. It never steals focus or intercepts keys — the app's own key dispatcher handles the next stroke.
+A passive shortcut cheat sheet that appears after a prefix chord to show the next available bindings grouped by topic. It never steals focus or intercepts keys; the app's own key dispatcher handles the next stroke.
 
 ## Grouped sheet and user bindings
 
@@ -52,4 +52,4 @@ WhichKeyView::new(header, rows).fit(window.viewport_size())
 | `WhichKeyHeader` | `.penna-which-key-head` | Prefix `Kbd`, table name, `? all keys` |
 | `WhichKeyRow` (`group`, `repeat`) | `.penna-which-key-row[data-group]` | Binding row + optional `↻` repeat mark |
 | `WhichKeyCap` (`yours`) | `.penna-which-key-cap[data-yours][data-mac]` | Keycap text (accent ink when user-defined) |
-| `blocks::touch::WhichKeyList` | — | Tappable touch list companion (native) |
+| `blocks::touch::WhichKeyList` | - | Tappable touch list companion (native) |

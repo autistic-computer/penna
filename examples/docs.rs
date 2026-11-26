@@ -553,7 +553,7 @@ fn write_llms_files(site: &Site, pages: &[Page], out: &Path) -> io::Result<()> {
     }
     fs::write(out.join("llms.txt"), index)?;
 
-    let mut components = String::from("# penna — Components & Blocks Reference\n");
+    let mut components = String::from("# penna: Components & Blocks Reference\n");
     for (group_index, group) in site.groups.iter().enumerate() {
         if group.title != "Components" && group.title != "Blocks" {
             continue;
@@ -588,7 +588,7 @@ fn write_llms_files(site: &Site, pages: &[Page], out: &Path) -> io::Result<()> {
     fs::write(out.join("llms-components.txt"), components)?;
 
     let mut tokens = String::from(
-        "# penna — Tokens, Surface Roles & Look Knobs\n\n\
+        "# penna: Tokens, Surface Roles & Look Knobs\n\n\
          ## Space Scale (rem-scaled)\n\
          - Steps: S2 (2px), S4 (4px), S6 (6px), S8 (8px), S10 (10px), S12 (12px), S16 (16px), S24 (24px), S32 (32px), S40 (40px), S64 (64px)\n\
          - Semantic gaps: GAP_TIGHT (4), GAP_RELATED (8), GAP_GROUP (16), GAP_SECTION (32)\n\

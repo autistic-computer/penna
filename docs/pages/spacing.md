@@ -184,7 +184,7 @@ The container sets the space inside its edges. Insets reach the text's line box 
 
 ## Inset lists
 
-Rows in a plain list touch (0) so row height carries the rhythm. In an inset list — menus, sidebars, pickers and settings navigation — rows sit `space-2` (2) apart inside `row-inset` (6), so rounded selection washes never merge.
+Rows in a plain list touch (0) so row height carries the rhythm. In an inset list (menus, sidebars, pickers and settings navigation), rows sit `space-2` (2) apart inside `row-inset` (6), so rounded selection washes never merge.
 
 ```figure uses=list
 <div class="docs-sp-list-compare">

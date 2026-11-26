@@ -40,6 +40,10 @@
   function fit(root = document) {
     edges(root);
     globalThis.pennaKit?.ceilText(root);
+    root.querySelectorAll(".penna-popup").forEach((element) => {
+      const menu = element.pennaMenu;
+      if (menu && (menu.search || menu.scopes.length) && menu.selected != null) menu.reveal(menu.rows[menu.selected]);
+    });
   }
 
   function state(element, name, on) {

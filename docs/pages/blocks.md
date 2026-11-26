@@ -1,6 +1,6 @@
 # All blocks
 
-Higher-level app patterns in `src/blocks` composed from penna's components — chrome rails, overlays, editors, agent chat, settings, and compact phone layouts.
+Higher-level app patterns in `src/blocks` composed from penna's components: chrome rails, overlays, editors, agent chat, settings, and compact phone layouts.
 
 ```figure uses=appearance,badge,button,card,chat,chip,code_editor,color_picker,compact,dialog,diff,dock,feedback,icon,input,inspector,kbd,label,list,notice,notification,palette,panel,progress,segmented,settings,sheet,sidebar,stack_menu,steps,switch,table,tile,title_bar,touch,trace,which_key
 <div class="docs-gal" data-docs-gallery>

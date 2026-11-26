@@ -1,6 +1,6 @@
 # Trace
 
-A collapsible tool-call and execution timeline for agents, build pipelines, and diagnostics — pairing live spinner/status glyphs, tabular durations, and expandable output wells.
+A collapsible tool-call and execution timeline for agents, build pipelines, and diagnostics, pairing live spinner/status glyphs, tabular durations, and expandable output wells.
 
 ## Agent execution timeline
 
@@ -21,7 +21,7 @@ Click any step row with a disclosure chevron to inspect its captured tool output
       <i class="penna-trace-chev" data-icon="chevron-right"></i>
     </button>
     <div class="penna-trace-detail" hidden>
-      <pre class="penna-trace-code" data-penna="card.code">Finished `dev` profile [unoptimized + debuginfo] in 0.26s — 0 warnings</pre>
+      <pre class="penna-trace-code" data-penna="card.code">Finished `dev` profile [unoptimized + debuginfo] in 0.26s (0 warnings)</pre>
     </div>
   </div>
   <div class="penna-trace-step">

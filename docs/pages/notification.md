@@ -101,10 +101,10 @@ Pass `.content(...)` to embed a [Progress](progress.html) bar or trailing action
 | --- | --- | --- |
 | `Notification::{info,success,warning,error}(msg)` | `.penna-toast[data-penna="toast"][data-ground]` | Floating toast surface |
 | `.title(...)` / `.message(...)` | `.penna-toast-title`, `.penna-toast-message` | Bold heading and 3-line clamped copy |
-| `.key(...)` | — | Deduplicate and replace in place |
+| `.key(...)` | - | Deduplicate and replace in place |
 | `.autohide(bool)` / `.autohide_after(Duration)` | `[data-autohide]` | Auto-dismiss timer (default 5 s), paused on hover |
 | `.pause_when_inactive(bool)` | `document.hidden` | Pause autohide countdown while the window is unfocused |
-| `WindowExt::toast_promise(key, loading, cx)` | — | Loading toast handle (`ToastPromise::resolve` / `reject`) |
+| `WindowExt::toast_promise(key, loading, cx)` | - | Loading toast handle (`ToastPromise::resolve` / `reject`) |
 | `.closable(bool)` | `.penna-toast-close > button` | Hover-revealed dismiss control |
 | `.content(f)` | `.penna-toast-actions` or embedded widgets | Actions or progress inside toast |
 | `WindowExt::push_notification` / `push_toast` | `.penna-toast-stack` | Stack host at window top center |

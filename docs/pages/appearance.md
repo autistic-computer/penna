@@ -89,4 +89,4 @@ Every row helper is also exported standalone (`theme_mode_control`, `accent_swat
 | `kit_row(item, app, controls, stacked, w, cx)` | `.appearance-run[data-penna="settings.card"] > .appearance-entry` | Standard row for each kit knob |
 | `accent_swatches(...)` | `.appearance-swatches > .appearance-ring > .appearance-swatch` | Preset swatches + custom color picker |
 | `corner_radius_slider(...)` / `percent_slider(...)` | `.appearance-slider-row > .appearance-slider` | Continuous knob slider with readout |
-| `AppearanceChange` | — | Typed delta enum emitted on edit |
+| `AppearanceChange` | - | Typed delta enum emitted on edit |

@@ -250,7 +250,7 @@ A control always tells what it is doing: rest, hover, pressed, focused, selected
 
 ## One kit
 
-The same components draw native `ala` windows, the phone and this site, in one look, light and dark. Knobs in [Look](look.html) tune color, corners, glass and faces — never a component's fills, sizes or behavior.
+The same components draw native `ala` windows, the phone and this site, in one look, light and dark. Knobs in [Look](look.html) tune color, corners, glass and faces, never a component's fills, sizes or behavior.
 
 ```figure uses=field,input,switch
 <div class="docs-pr-kit">

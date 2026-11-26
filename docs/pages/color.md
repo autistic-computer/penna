@@ -4,7 +4,7 @@ Color separates surfaces, marks what is on, and warns. Never decoration.
 
 ## Surfaces
 
-Each layer steps away from the one under it: darker in light mode, lighter in dark. Steps of fill separate surfaces — panels, cards and controls draw no shadow.
+Each layer steps away from the one under it: darker in light mode, lighter in dark. Steps of fill separate surfaces; panels, cards and controls draw no shadow.
 
 ```figure
 <div class="docs-clr-stack" data-docs-color>

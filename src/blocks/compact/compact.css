@@ -267,8 +267,8 @@
   position: absolute;
   inset: 0;
   background: color-mix(in srgb, var(--penna-bg) 72%, transparent);
-  -webkit-backdrop-filter: var(--penna-glass-backdrop, blur(20px) saturate(1.8));
-  backdrop-filter: var(--penna-glass-backdrop, blur(20px) saturate(1.8));
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -741,7 +741,7 @@
 }
 
 .penna-machine-card[data-waiting][data-penna] {
-  background: color-mix(in oklab, var(--penna-warning) 14%, var(--penna-fill));
+  background: color-mix(in oklab, var(--penna-warning) 14%, var(--penna-panel));
 }
 
 :is(.penna-machine-card, .penna-window-card):is(:active, [data-state~="active"]) > .penna-press {
@@ -829,7 +829,7 @@
 }
 
 .penna-window-card[data-waiting][data-penna] {
-  background: color-mix(in oklab, var(--penna-warning) 14%, var(--penna-fill));
+  background: color-mix(in oklab, var(--penna-warning) 14%, var(--penna-panel));
 }
 
 .penna-window-row {
@@ -837,7 +837,7 @@
   align-items: center;
   gap: var(--penna-space-12);
   min-height: 64px;
-  padding: var(--penna-space-10) var(--penna-inset-card);
+  padding: 0 var(--penna-inset-card);
 }
 
 .penna-window-row-copy {

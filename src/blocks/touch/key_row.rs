@@ -81,14 +81,23 @@ pub(super) enum KeyLook {
 #[must_use]
 pub fn key_pill_layer(theme: &Theme) -> Layer {
     let floating = theme.layer(Surface::new(Kind::Floating.role()), PaintState::Rest);
-    let radius = if theme.pill_controls() {
-        ala::FULL_CORNER_RADIUS
+    let (radius, share, smoothing) = if theme.pill_controls() {
+        (
+            ala::FULL_CORNER_RADIUS,
+            None,
+            crate::Smoothing::CIRCLE.exponent(),
+        )
     } else {
-        theme.control_corner(px(KEY_PILL_HEIGHT))
+        (
+            theme.control_corner(px(KEY_PILL_HEIGHT)),
+            Some(theme.control_roundness()),
+            floating.smoothing,
+        )
     };
     Layer {
         radius,
-        share: None,
+        share,
+        smoothing,
         ..floating
     }
 }
@@ -96,6 +105,8 @@ pub fn key_pill_layer(theme: &Theme) -> Layer {
 fn disc_layer(theme: &Theme) -> Layer {
     Layer {
         radius: ala::FULL_CORNER_RADIUS,
+        share: None,
+        smoothing: crate::Smoothing::CIRCLE.exponent(),
         ..key_pill_layer(theme)
     }
 }
@@ -129,6 +140,7 @@ pub(super) fn key_surface<E: Styled>(element: E, look: KeyLook, cx: &App) -> E {
     element
         .h(rems_from_px(KEY_SIZE))
         .layer(&key_layer(surface, state, theme))
+        .corner_radius_mode(ala::CornerRadiusMode::Fixed)
 }
 
 #[derive(Clone)]

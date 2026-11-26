@@ -14,6 +14,11 @@
   display: contents;
 }
 
+.penna-notice > .penna-notice-tone[data-penna][data-penna] {
+  --penna-ink: inherit;
+  --penna-muted: inherit;
+}
+
 .penna-notice-lead {
   display: flex;
   flex: none;

@@ -16,10 +16,19 @@
     );
   }
 
+  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+  const frozen = new URLSearchParams(location.search).get("motion") === "0";
+  const still = () => frozen || reduced?.matches;
+
   for (const label of document.querySelectorAll('[data-row="activity-live"] .penna-chat-resolve')) {
     let at = 0;
+    if (still()) {
+      label.textContent = `${LABELS[at]}…`;
+      continue;
+    }
     resolve(label, LABELS[at]);
     setInterval(() => {
+      if (still()) return;
       at = (at + 1) % LABELS.length;
       resolve(label, LABELS[at]);
     }, EVERY);

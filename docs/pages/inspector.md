@@ -1,6 +1,6 @@
 # Inspector
 
-A trailing (or leading) side panel that inspects the selected item in detail — host settings, pane properties, or diagnostic metadata — without leaving the workspace.
+A trailing (or leading) side panel that inspects the selected item in detail (host settings, pane properties, or diagnostic metadata) without leaving the workspace.
 
 ## Structure
 

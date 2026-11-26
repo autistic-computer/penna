@@ -844,8 +844,52 @@
     true,
   );
 
+  function wireCollapsibleCodeBlocks() {
+    document.querySelectorAll(".penna-docs-page .md-code > pre[data-actions]").forEach((pre) => {
+      if (pre.dataset.codeCollapsible) return;
+      const code = pre.querySelector("code");
+      if (!code) return;
+      const raw = (code.textContent || "").replace(/\n$/, "");
+      const lines = raw ? raw.split("\n").length : 0;
+      if (lines < 16) return;
+
+      pre.dataset.codeCollapsible = "true";
+      pre.dataset.codeState = "collapsed";
+
+      const bar = document.createElement("div");
+      bar.className = "docs-code-toggle-bar";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "penna-button docs-code-toggle";
+      btn.dataset.penna = "button";
+      btn.dataset.size = "small";
+      btn.setAttribute("aria-expanded", "false");
+
+      const icon = document.createElement("i");
+      icon.dataset.icon = "chevron-down";
+      const label = document.createElement("span");
+      label.className = "penna-label";
+      label.setAttribute("data-penna-text", "");
+      label.textContent = `Expand · ${lines} lines`;
+      btn.append(icon, label);
+      bar.append(btn);
+      pre.append(bar);
+      requestAnimationFrame(() => window.pennaKit?.roundAll?.(bar));
+
+      btn.addEventListener("click", () => {
+        const expanded = pre.dataset.codeState === "expanded";
+        pre.dataset.codeState = expanded ? "collapsed" : "expanded";
+        btn.setAttribute("aria-expanded", String(!expanded));
+        icon.dataset.icon = expanded ? "chevron-down" : "chevron-up";
+        label.textContent = expanded ? `Expand · ${lines} lines` : "Collapse";
+        requestAnimationFrame(() => window.pennaKit?.roundAll?.(pre));
+      });
+    });
+  }
+
   syncAppearance();
   syncSidebarState();
+  wireCollapsibleCodeBlocks();
   revealActiveRow(true);
   requestAnimationFrame(() => {
     shell?.toggleAttribute("data-side-ready", true);

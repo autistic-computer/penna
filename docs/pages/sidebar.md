@@ -60,5 +60,5 @@ sidebar_panel(
 | `sidebar_titlebar(id, controls, cx)` | `.penna-strip` | Traffic-light-cleared top chrome bar |
 | `sidebar_footer(id, leading, trailing, cx)` | Custom footer flex row | Pinned bottom actions bar |
 | `chrome_button(id, icon, tooltip)` | `[data-penna="chrome.button"]` | 28 px square chrome icon button |
-| `sidebar_resize_handle(id, divider, cx)` | — | 8 px trailing resize strip |
+| `sidebar_resize_handle(id, divider, cx)` | - | 8 px trailing resize strip |
 | `status_dot(color)` | `.penna-dot` | 6 px status dot beside a row |

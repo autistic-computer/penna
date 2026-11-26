@@ -235,6 +235,9 @@ impl Live {
                 loop {
                     cx.background_executor().timer(LIVE_EVERY).await;
                     let turned = this.update(cx, |live: &mut Self, cx| {
+                        if cx.reduce_motion() {
+                            return;
+                        }
                         live.at += 1;
                         cx.notify();
                     });

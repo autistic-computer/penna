@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use ala::{BoxShadow, GlassMaterial, Hsla, px};
+use ala::{BoxShadow, GlassMaterial, Hsla, Rgba, px};
 
 use crate::{
     ADAPTIVE_CORNER_FRACTION, CORNER_SMOOTHING, Colorize as _, Elevation, Emphasis, Ground, Kind,
@@ -43,7 +43,7 @@ const INKED: [(Tone, &str); 5] = [
     (Tone::Accent, "accent"),
 ];
 
-const PAINT: [(&str, &str); 14] = [
+const PAINT: [(&str, &str); 15] = [
     ("fill", "transparent"),
     ("edge", "transparent"),
     ("bw", "0px"),
@@ -54,6 +54,7 @@ const PAINT: [(&str, &str); 14] = [
     ("row", "0"),
     ("mark", "transparent"),
     ("backdrop", "none"),
+    ("glow", "none"),
     ("rim", "0 0 #0000"),
     ("glass", "0"),
     ("focus", "transparent"),
@@ -235,20 +236,25 @@ fn rules(theme: &Theme, toned: &[SurfaceRole], full: bool) -> Vec<(String, Strin
     gapped.pane_margin = gapped.pane_margin.max(px(1.0));
     let pane = gapped.layer(Surface::new(Kind::Pane.role()), PaintState::Rest);
     let pane_shadow = gapped.pane_shadows();
+    let bg_luma = luma(theme.background);
     let key = ".penna-gaps [data-penna=\"pane\"]".to_owned();
     let css = if pane_shadow.is_empty() {
         format!(
             "{key} {{ --penna-rim: {}; --penna-edge: {}; --penna-bw: {}; }}\n",
-            pane.glass
-                .map_or_else(|| "0 0 #0000".to_owned(), |material| rim(&material)),
+            pane.glass.map_or_else(
+                || "0 0 #0000".to_owned(),
+                |material| rim(&material, bg_luma),
+            ),
             color(pane.border),
             length(f32::from(pane.border_width))
         )
     } else {
         format!(
             "{key} {{ --penna-rim: {}; --penna-shadow: {}; --penna-edge: {}; --penna-bw: {}; }}\n",
-            pane.glass
-                .map_or_else(|| "0 0 #0000".to_owned(), |material| rim(&material)),
+            pane.glass.map_or_else(
+                || "0 0 #0000".to_owned(),
+                |material| rim(&material, bg_luma),
+            ),
             shadows(&pane_shadow),
             color(pane.border),
             length(f32::from(pane.border_width))
@@ -382,7 +388,7 @@ fn solid_rows(theme: &Theme, toned: &[SurfaceRole]) -> Vec<(Ground, String)> {
                     format!(
                         ":is({}):is({})",
                         rows.join(", "),
-                        state_selector(*state, Kind::Item).replace('&', "")
+                        state_selector(*state, Kind::Item.role()).replace('&', "")
                     )
                 })
                 .collect::<Vec<_>>();
@@ -496,12 +502,19 @@ fn grounded(role: SurfaceRole) -> String {
     format!("{}[data-ground]", selector(role))
 }
 
-fn state_selector(state: PaintState, kind: Kind) -> &'static str {
+fn state_selector(state: PaintState, role: SurfaceRole) -> &'static str {
     match state {
-        PaintState::Focused if kind == Kind::Field => "&:focus-within, &[data-state~=\"focused\"]",
+        PaintState::Focused if role.kind == Kind::Field => {
+            "&:focus-within, &[data-state~=\"focused\"]"
+        }
+        PaintState::Active if role == roles::FIELD_COMPOSER => "&[data-state~=\"active\"]",
         PaintState::Rest => "&",
-        PaintState::Hover => "&:hover, &[data-state~=\"hover\"]",
-        PaintState::Active => "&:active, &[data-state~=\"active\"]",
+        PaintState::Hover => {
+            "&:hover:where(:not(:disabled, [data-state~=\"disabled\"], [aria-disabled=\"true\"])), &[data-state~=\"hover\"]"
+        }
+        PaintState::Active => {
+            "&:active:where(:not(:disabled, [data-state~=\"disabled\"], [aria-disabled=\"true\"])), &[data-state~=\"active\"]"
+        }
         PaintState::Focused => "&[data-state~=\"focused\"]",
         PaintState::Current => {
             "&[data-state~=\"current\"], &[aria-current]:not([aria-current=\"false\"])"
@@ -552,7 +565,7 @@ fn write_role(
             let _ = writeln!(
                 css,
                 "{indent}  {} {{ {} }}",
-                state_selector(state, surface.role.kind),
+                state_selector(state, surface.role),
                 declarations(&changed)
             );
         }
@@ -587,7 +600,7 @@ fn write_over(css: &mut String, theme: &Theme, base: &str, surface: Surface, und
             (!changed.is_empty()).then(|| {
                 format!(
                     "    {} {{ {} }}\n",
-                    state_selector(state, surface.role.kind),
+                    state_selector(state, surface.role),
                     declarations(&changed)
                 )
             })
@@ -604,9 +617,16 @@ fn write_over(css: &mut String, theme: &Theme, base: &str, surface: Surface, und
 fn vars(theme: &Theme, surface: Surface, layer: &Layer) -> Vec<(&'static str, String)> {
     let role = surface.role;
     let fill = layer.glass.map_or(layer.fill, |material| material.tint);
+    let (paint_fill, glass_backdrop) = match layer.glass {
+        Some(material) => {
+            let (folded, bd) = glass_paint(&material);
+            (folded, Some(bd))
+        }
+        None => (fill, None),
+    };
     let muted = layer.muted_text();
     let mut vars = vec![
-        ("fill", color(fill)),
+        ("fill", color(paint_fill)),
         ("ink", color(layer.text)),
         ("muted", color(muted)),
         ("edge", color(layer.border)),
@@ -638,16 +658,25 @@ fn vars(theme: &Theme, surface: Surface, layer: &Layer) -> Vec<(&'static str, St
     }
     if let Some(material) = layer.glass {
         let themed = theme.glass.as_ref();
-        let (backdrop, rim) = (backdrop(&material), rim(&material));
-        if themed.is_some_and(|glass| self::backdrop(glass) == backdrop) {
+        let bg_luma = luma(theme.background);
+        let backdrop = glass_backdrop.unwrap_or_else(|| backdrop(&material));
+        let (rim, glow) = (rim(&material, bg_luma), glow(&material));
+        if themed.is_some_and(|glass| backdrop_plain(glass) == backdrop) {
             vars.push(("backdrop", "var(--penna-glass-backdrop)".to_owned()));
         } else {
             vars.push(("backdrop", backdrop));
         }
-        if themed.is_some_and(|glass| self::rim(glass) == rim) {
+        if themed.is_some_and(|glass| self::rim(glass, bg_luma) == rim) {
             vars.push(("rim", "var(--penna-glass-rim)".to_owned()));
         } else {
             vars.push(("rim", rim));
+        }
+        if glow != "none" {
+            if themed.is_some_and(|glass| self::glow(glass) == glow) {
+                vars.push(("glow", "var(--penna-glass-glow-layer)".to_owned()));
+            } else {
+                vars.push(("glow", glow));
+            }
         }
         vars.push(("glass", "1".to_owned()));
     }
@@ -796,7 +825,7 @@ fn write_root(css: &mut String, theme: &Theme) {
     root.extend(scale_vars());
     root.extend(syntax_vars(theme));
     if let Some(glass) = theme.glass {
-        root.extend(glass_vars(&glass));
+        root.extend(glass_vars(&glass, luma(theme.background)));
     }
     let _ = writeln!(css, ":root {{");
     for (name, value) in root {
@@ -900,7 +929,12 @@ fn corner_grow(exponent: f32) -> f32 {
     }
 }
 
-fn glass_vars(material: &GlassMaterial) -> Vec<(String, String)> {
+fn luma(color: Hsla) -> f32 {
+    let rgba = Rgba::from(color);
+    0.2126 * rgba.r + 0.7152 * rgba.g + 0.0722 * rgba.b
+}
+
+fn glass_vars(material: &GlassMaterial, bg_luma: f32) -> Vec<(String, String)> {
     let var = |name: &str| format!("--penna-glass-{name}");
     vec![
         (var("blur"), length(f32::from(material.blur))),
@@ -928,9 +962,60 @@ fn glass_vars(material: &GlassMaterial) -> Vec<(String, String)> {
         (var("noise"), number(material.noise)),
         (var("glow"), number(material.glow)),
         (var("glow-radius"), length(f32::from(material.glow_radius))),
-        (var("backdrop"), backdrop(material)),
-        (var("rim"), rim(material)),
+        (var("backdrop"), backdrop_plain(material)),
+        (var("glow-layer"), glow(material)),
+        (var("rim"), rim(material, bg_luma)),
     ]
+}
+
+fn glass_paint(material: &GlassMaterial) -> (Hsla, String) {
+    let tint = Rgba::from(material.tint);
+    let contrast = material.contrast.max(0.0);
+    let scale = (1.0 - tint.a) * contrast;
+    let shift = (1.0 - tint.a) * (0.5 - 0.5 * contrast + material.brightness);
+    let numerators = [tint.r, tint.g, tint.b].map(|channel| tint.a * channel + shift);
+    let min_num = numerators.into_iter().fold(f32::INFINITY, f32::min);
+    let max_num = numerators.into_iter().fold(f32::NEG_INFINITY, f32::max);
+    let alpha = (1.0 - scale).max(max_num);
+    if min_num >= -0.005 && alpha > 0.001 && alpha <= 1.005 {
+        let alpha = alpha.clamp(0.0, 1.0);
+        let [r, g, b] = numerators.map(|num| (num / alpha).clamp(0.0, 1.0));
+        let rest = 1.0 - alpha;
+        let boost = if rest > 0.001 { scale / rest } else { 1.0 };
+        let backdrop = if (boost - 1.0).abs() > 0.005 {
+            format!("{} brightness({})", backdrop_plain(material), number(boost))
+        } else {
+            backdrop_plain(material)
+        };
+        return (Hsla::from(Rgba { r, g, b, a: alpha }), backdrop);
+    }
+    (material.tint, backdrop(material))
+}
+
+fn backdrop_plain(material: &GlassMaterial) -> String {
+    format!(
+        "blur({}) saturate({})",
+        length(f32::from(material.blur)),
+        number(material.saturation),
+    )
+}
+
+fn glow(material: &GlassMaterial) -> String {
+    let radius = f32::from(material.glow_radius);
+    if material.glow <= 0.0001 || radius <= 0.0 {
+        return "none".to_owned();
+    }
+    let peak = (material.glow * 1.15).min(1.0);
+    let cx = number(material.glow_center.x * 100.0);
+    let cy = number(material.glow_center.y * 100.0);
+    format!(
+        "radial-gradient(circle {} at {cx}% {cy}%, rgb(255 255 255 / {}) 0%, rgb(255 255 255 / {}) 25%, rgb(255 255 255 / {}) 50%, rgb(255 255 255 / {}) 75%, transparent 100%)",
+        length(radius),
+        number(peak),
+        number(peak * 0.5625),
+        number(peak * 0.25),
+        number(peak * 0.0625),
+    )
 }
 
 fn backdrop(material: &GlassMaterial) -> String {
@@ -964,7 +1049,7 @@ fn mix(a: f32, b: f32, t: f32) -> f32 {
     a + (b - a) * t
 }
 
-fn rim(material: &GlassMaterial) -> String {
+fn rim(material: &GlassMaterial, bg_luma: f32) -> String {
     let (x, y) = (material.light_angle.cos(), material.light_angle.sin());
     let bezel = f32::from(material.bezel);
     let glint = f32::from(material.glint_width).min(bezel);
@@ -974,6 +1059,7 @@ fn rim(material: &GlassMaterial) -> String {
     let directionality = material.light_directionality.clamp(0.0, 1.0);
     let glint_spread = material.glint_spread.clamp(0.0, 1.0);
     let edge_spread = material.edge_spread.clamp(0.0, 1.0);
+    let headroom = (1.0 - bg_luma).max(0.05);
 
     let mut layers = Vec::new();
     let mut push = |inset: bool, dx: f32, dy: f32, blur: f32, spread: f32, ink: Hsla| {
@@ -989,7 +1075,7 @@ fn rim(material: &GlassMaterial) -> String {
         let facing_extra = (1.0 - base_lit).max(0.0);
         let far_lit = mix(mix(1.0, 0.18, directionality), 1.0, glint_spread);
         let far_extra = (far_lit - base_lit).max(0.0);
-        let spec = lit * material.specular;
+        let spec = lit * material.specular * 0.675 / headroom;
         push(
             true,
             0.0,
@@ -1006,7 +1092,7 @@ fn rim(material: &GlassMaterial) -> String {
                 0.0,
                 tail,
                 0.0,
-                light.alpha((spec * 0.2 * base_lit).min(1.0)),
+                light.alpha((lit * material.specular * 0.126 / headroom * base_lit).min(1.0)),
             );
         }
         push(
@@ -1044,7 +1130,7 @@ fn rim(material: &GlassMaterial) -> String {
         let away_extra = (1.0 - base_edge).max(0.0);
         let toward_lit = mix(mix(1.0, 0.2, directionality), 1.0, edge_spread);
         let toward_extra = (toward_lit - base_edge).max(0.0);
-        let contour = dark.a * material.edge_shadow;
+        let contour = 0.5 * dark.a * material.edge_shadow;
         push(
             false,
             0.0,
@@ -1246,13 +1332,44 @@ mod tests {
     #[test]
     fn full_glint_spread_emits_a_perimeter_ring_without_transparent_stubs() {
         let dark = kit_theme(&builtin_themes()[0].1, ThemeMode::Dark);
-        let dark_rim = rim(&dark.glass.expect("default dark has glass"));
-        assert_eq!(dark_rim, "inset 0px 0px 0px 0.5px #ffffff2b");
+        let dark_rim = rim(
+            &dark.glass.expect("default dark has glass"),
+            luma(dark.background),
+        );
+        assert_eq!(dark_rim, "inset 0px 0px 0px 0.5px #ffffff21");
 
         let light = kit_theme(&builtin_themes()[0].1, ThemeMode::Light);
-        let light_rim = rim(&light.glass.expect("default light has glass"));
-        assert!(light_rim.starts_with("inset 0px 0px 0px 0.85px #ffffff33, "));
-        assert!(light_rim.ends_with(", 0px 0px 0px 0.5px #00000033"));
+        let light_rim = rim(
+            &light.glass.expect("default light has glass"),
+            luma(light.background),
+        );
+        assert!(light_rim.starts_with("inset 0px 0px 0px 0.85px #ffffff, "));
+        assert!(light_rim.ends_with(", 0px 0px 0px 0.5px #0000001a"));
         assert!(!light_rim.contains("transparent"));
+    }
+
+    #[test]
+    fn glass_paint_folds_tone_and_boosts_brightening_light_glass() {
+        let dark = kit_theme(&builtin_themes()[0].1, ThemeMode::Dark);
+        let dark_composer = dark
+            .layer(Surface::new(roles::FIELD_COMPOSER), PaintState::Rest)
+            .glass
+            .expect("default dark composer has glass");
+        let (_, dark_bd) = glass_paint(&dark_composer);
+        assert!(!dark_bd.contains("brightness"), "{dark_bd}");
+
+        let light = kit_theme(&builtin_themes()[0].1, ThemeMode::Light);
+        let light_composer = light
+            .layer(Surface::new(roles::FIELD_COMPOSER), PaintState::Rest)
+            .glass
+            .expect("default light composer has glass");
+        let (light_fill, light_bd) = glass_paint(&light_composer);
+        assert!(
+            light_fill.a > 0.7 && light_bd.contains("brightness("),
+            "{light_bd}"
+        );
+        assert!(stylesheet(&dark, &[]).contains(
+            "&:hover:where(:not(:disabled, [data-state~=\"disabled\"], [aria-disabled=\"true\"]))"
+        ));
     }
 }

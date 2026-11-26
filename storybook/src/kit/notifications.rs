@@ -15,7 +15,7 @@ use penna::{
     h_flex, v_flex,
 };
 
-use super::support::{Probe, after_first_frame, hover, nudge, press, tab, when_visible};
+use super::support::{Probe, after_first_frame, click, hover, nudge, tab, when_visible};
 use crate::story::{Section, Story, row, stateless, states};
 
 actions!(storybook_tooltip, [SplitRight, CopyPath]);
@@ -332,7 +332,6 @@ impl Render for Focused {
 struct Panel {
     name: Entity<InputState>,
     trigger: Probe,
-    _bounds: Subscription,
 }
 
 impl Panel {
@@ -341,16 +340,9 @@ impl Panel {
         let trigger = Probe::default();
         let probe = trigger.clone();
         when_visible(&trigger, window, move |window, cx| {
-            press(&probe, MouseButton::Left, window, cx);
+            click(&probe, MouseButton::Left, window, cx);
         });
-        cx.new(|cx| Self {
-            name,
-            trigger,
-            _bounds: cx.observe_window_bounds(window, |this: &mut Self, window, cx| {
-                hover(&this.trigger, window, cx);
-            }),
-        })
-        .into()
+        cx.new(|_| Self { name, trigger }).into()
     }
 }
 

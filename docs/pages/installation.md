@@ -167,75 +167,105 @@ penna builds for native `ala` windows in Rust and for the web in plain HTML and 
 </div>
 ```
 
-## What a booted window gives you
+## Hello, world
 
-Wrapping your view in `Root` with `penna::Assets` and `penna::init` wires tokens, icons and overlays before you build any screen. Click through the miniature window below to try each layer live.
+A minimal counter built with `TitleBar`, `Label` and `Button` inside `Root`.
 
-```figure uses=notice
+```figure uses=label,title_bar
 <div class="penna-window docs-install-win" data-install-win>
-  <div class="penna-lights" aria-hidden="true"><i></i><i></i><i></i></div>
-  <aside data-penna="sidebar" data-ground>
-    <div class="penna-strip"></div>
-    <div data-penna="sidebar.row" data-win-tab="tokens" data-win-label="Tokens" aria-current="page" data-state="selected" role="button" tabindex="0">
-      <span class="penna-marker"><i data-icon="palette"></i></span>
-      <span class="penna-label" data-penna-text>Tokens</span>
-    </div>
-    <div data-penna="sidebar.row" data-win-tab="overlays" data-win-label="Overlays" role="button" tabindex="0">
-      <span class="penna-marker"><i data-icon="layers"></i></span>
-      <span class="penna-label" data-penna-text>Overlays</span>
-    </div>
-    <div data-penna="sidebar.row" data-win-tab="icons" data-win-label="Icons" role="button" tabindex="0">
-      <span class="penna-marker"><i data-icon="sparkle"></i></span>
-      <span class="penna-label" data-penna-text>Icons</span>
-    </div>
-  </aside>
-  <header data-penna="titlebar" data-ground>
-    <span class="docs-install-win-title" data-win-title>Tokens</span>
-    <span class="docs-install-win-meta" data-win-mode-readout>Dark · Liquid glass</span>
+  <div class="docs-install-win-spec" aria-hidden="true"></div>
+  <header class="docs-install-titlebar" data-penna="titlebar" data-ground>
+    <div class="docs-install-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+    <span class="penna-type docs-install-win-title" data-type="small" data-muted>hello</span>
   </header>
-  <div data-penna="pane" data-ground>
-    <div class="docs-win-view" data-win-view="tokens">
-      <p class="docs-win-copy">Every surface derives its fill, hairline and ink from one set of mode tokens.</p>
-      <div class="docs-win-swatches">
-        <div class="docs-win-swatch"><span class="docs-win-swatch-chip" style="background: var(--penna-bg)"></span><span class="docs-win-swatch-label">bg</span></div>
-        <div class="docs-win-swatch"><span class="docs-win-swatch-chip" style="background: var(--penna-panel)"></span><span class="docs-win-swatch-label">panel</span></div>
-        <div class="docs-win-swatch"><span class="docs-win-swatch-chip" style="background: var(--penna-accent)"></span><span class="docs-win-swatch-label">accent</span></div>
-        <div class="docs-win-swatch"><span class="docs-win-swatch-chip" style="background: var(--penna-fg)"></span><span class="docs-win-swatch-label">fg</span></div>
-      </div>
-      <div class="docs-win-actions">
-        <button class="penna-button" data-penna="button" data-size="small" data-win-toggle-mode><i data-icon="sun" data-docs-mode-icon="dark"></i><i data-icon="moon" data-docs-mode-icon="light"></i><span class="penna-label" data-penna-text>Flip mode</span></button>
-      </div>
-    </div>
-
-    <div class="docs-win-view" data-win-view="overlays" hidden>
-      <p class="docs-win-copy">Root hosts popovers, dialogs, tooltips and toasts above your panes so clipping and dismissal work out of the box.</p>
-      <div>
-        <div class="penna-popover docs-win-pop-wrap" data-win-popover-host>
-          <button class="penna-button" data-penna="button" data-tone="primary" data-prominent data-size="small" aria-expanded="false" data-win-popover-btn><span class="penna-label" data-penna-text>Open popover</span></button>
-          <div class="penna-popover-panel" data-penna="popover" data-ground data-win-popover>
-            <div class="docs-win-pop-title">Hosted by Root</div>
-            <div class="docs-win-pop-text">Follows the header Glass knob and dismisses on Escape or outside click.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="docs-win-view" data-win-view="icons" hidden>
-      <p class="docs-win-copy">penna::Assets embeds the full icon set and adapts stroke corners to your radius knob.</p>
-      <div class="docs-win-icons">
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-state="current" data-win-icon="Terminal" aria-label="Terminal"><i data-icon="terminal"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="PanelLeft" aria-label="PanelLeft"><i data-icon="panel-left"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="Search" aria-label="Search"><i data-icon="search"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="Sliders" aria-label="Sliders"><i data-icon="sliders"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="Palette" aria-label="Palette"><i data-icon="palette"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="Layers" aria-label="Layers"><i data-icon="layers"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="Check" aria-label="Check"><i data-icon="check"></i></button>
-        <button class="penna-button" data-penna="button.quiet" data-shape="icon" data-win-icon="Copy" aria-label="Copy"><i data-icon="copy"></i></button>
-      </div>
-      <div class="docs-win-icon-readout" data-win-icon-name>IconName::Terminal</div>
+  <div class="docs-install-win-pane" data-penna="pane" data-ground>
+    <span class="penna-type" data-type="title" data-penna-text>Hello, penna</span>
+    <span class="penna-type" data-type="body" data-muted data-penna-text data-hello-count>Clicked 0 times</span>
+    <div class="docs-install-hello-actions">
+      <button class="penna-button" data-penna="button" data-tone="primary" data-prominent type="button" data-hello-inc><span class="penna-label" data-penna-text>Count</span></button>
+      <button class="penna-button" data-penna="button.quiet" type="button" data-hello-reset disabled><span class="penna-label" data-penna-text>Reset</span></button>
     </div>
   </div>
 </div>
+```
+
+```rust
+use ala::{
+    Context, IntoElement, ParentElement as _, Render,
+    Styled as _, Window, WindowOptions, div,
+};
+use penna::components::button::{Button, ButtonVariants as _};
+use penna::{
+    Disableable as _, Label, Root, Space, TITLE_BAR_HEIGHT,
+    TextStyle, TitleBar, inline, stack,
+};
+
+struct Hello {
+    count: usize,
+}
+
+impl Render for Hello {
+    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        let subtitle = match self.count {
+            1 => "Clicked 1 time".to_string(),
+            n => format!("Clicked {n} times"),
+        };
+
+        div()
+            .size_full()
+            .flex()
+            .flex_col()
+            .child(TitleBar::new().child(Label::new(TextStyle::Small, "hello").muted()))
+            .child(
+                stack(Space::GAP_RELATED)
+                    .flex_1()
+                    .items_center()
+                    .justify_center()
+                    .child(Label::new(TextStyle::Title, "Hello, penna"))
+                    .child(Label::new(TextStyle::Body, subtitle).muted())
+                    .child(
+                        inline(Space::GAP_RELATED)
+                            .pt(Space::S8)
+                            .child(
+                                Button::new("inc")
+                                    .label("Count")
+                                    .primary()
+                                    .on_click(cx.listener(|this, _, _, cx| {
+                                        this.count += 1;
+                                        cx.notify();
+                                    })),
+                            )
+                            .child(
+                                Button::new("reset")
+                                    .label("Reset")
+                                    .ghost()
+                                    .disabled(self.count == 0)
+                                    .on_click(cx.listener(|this, _, _, cx| {
+                                        this.count = 0;
+                                        cx.notify();
+                                    })),
+                            ),
+                    ),
+            )
+    }
+}
+
+fn main() {
+    ala_platform::application()
+        .with_assets(penna::Assets)
+        .run(|cx| {
+            penna::init(cx);
+            let options = WindowOptions {
+                titlebar: Some(TitleBar::title_bar_options(TITLE_BAR_HEIGHT)),
+                ..WindowOptions::default()
+            };
+            cx.open_window(options, |window, cx| {
+                let view = cx.new(|_| Hello { count: 0 });
+                cx.new(|cx| Root::new(view, window, cx))
+            })
+            .ok();
+        });
+}
 ```
 
 ```figure uses=notice

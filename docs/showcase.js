@@ -55,11 +55,24 @@
       termCwd: "~/dev/penna",
       splitDefault: true,
       focusDefault: "chat",
+      git: { branch: "main", files: "2 files", add: "+14", del: "-5" },
+      usage: 0.34,
       messages: [
         { role: "user", text: "The PiP hit box is reading the stack bounds instead of its own frame." },
-        { role: "step", icon: "file", label: "Read", detail: "src/foundation/surface.rs" },
-        { role: "step", icon: "pencil", label: "Edited", detail: "src/blocks/compact/mod.rs" },
-        { role: "step", icon: "square-terminal", label: "cargo test", badge: "493 passed", tone: "success" },
+        {
+          role: "summary",
+          label: "Worked for 18s",
+          counts: [
+            { icon: "file", count: 2 },
+            { icon: "pencil", count: 1 },
+            { icon: "square-terminal", count: 1 },
+          ],
+          steps: [
+            { icon: "file", label: "Read", detail: "src/foundation/surface.rs" },
+            { icon: "pencil", label: "Edited", detail: "src/blocks/compact/mod.rs" },
+            { icon: "square-terminal", label: "cargo test", badge: "493 passed", tone: "success" },
+          ],
+        },
         { role: "assistant", text: "Moved the occlusion box onto the floating card and pinned the hit-test bounds." },
       ],
       termLines: [
@@ -81,6 +94,8 @@
       termCwd: "~/dev/penna",
       splitDefault: true,
       focusDefault: "chat",
+      git: { branch: "main", files: "1 file", add: "+8", del: "-2" },
+      usage: 0.52,
       messages: [
         { role: "user", text: "Check every glass role clears 4.5:1 over both dark and light content." },
         { role: "step", icon: "file", label: "Read", detail: "src/foundation/interface_theme.rs" },
@@ -102,6 +117,8 @@
       termCwd: "~/dev/penna",
       splitDefault: false,
       focusDefault: "term",
+      git: { branch: "main", files: "0 files", add: "+0", del: "-0" },
+      usage: 0.12,
       messages: [
         { role: "assistant", text: "No active chat in this window. Split a pane or write below to start one." },
       ],
@@ -124,9 +141,16 @@
       termCwd: "~/dev/zebrilus",
       splitDefault: true,
       focusDefault: "chat",
+      git: { branch: "main", files: "1 file", add: "+18", del: "-0" },
+      usage: 0.21,
       messages: [
         { role: "user", text: "Summarize the penna token changes for the next release." },
-        { role: "step", icon: "pencil", label: "Edited", detail: "CHANGELOG.md" },
+        {
+          role: "summary",
+          label: "Worked for 9s",
+          counts: [{ icon: "pencil", count: 1 }],
+          steps: [{ icon: "pencil", label: "Edited", detail: "CHANGELOG.md" }],
+        },
         { role: "assistant", text: "Drafted the changelog entries covering the OKLCH data palette and token inspector." },
       ],
       termLines: [
@@ -144,6 +168,8 @@
     const viewSeg = zzRoot.querySelector("[data-sc-zz-view]");
     const splitButtons = [...zzRoot.querySelectorAll("[data-sc-zz-split]")];
     const sideToggles = [...zzRoot.querySelectorAll("[data-sc-zz-side-toggle]")];
+    const chromeBtn = zzRoot.querySelector("[data-sc-zz-chrome-btn]");
+    const chromeLabel = zzRoot.querySelector("[data-sc-zz-chrome-label]");
     const stage = zzRoot.querySelector("[data-sc-zz-stage]");
     const viewPanes = [...zzRoot.querySelectorAll("[data-sc-zz-pane]")];
     const rows = [...zzRoot.querySelectorAll("[data-sc-win]")];
@@ -157,6 +183,13 @@
     const outEl = zzRoot.querySelector("[data-sc-zz-out]");
     const form = zzRoot.querySelector("[data-sc-zz-form]");
     const input = zzRoot.querySelector("[data-sc-zz-input]");
+    const sendBtn = zzRoot.querySelector("[data-sc-zz-send]");
+    const branchEl = zzRoot.querySelector("[data-sc-zz-branch]");
+    const filesEl = zzRoot.querySelector("[data-sc-zz-files]");
+    const addEl = zzRoot.querySelector("[data-sc-zz-add]");
+    const delEl = zzRoot.querySelector("[data-sc-zz-del]");
+    const ringEl = zzRoot.querySelector("[data-sc-zz-ring]");
+    const pctEl = zzRoot.querySelector("[data-sc-zz-pct]");
     const newChatBtn = zzRoot.querySelector("[data-sc-zz-new]");
     const hitGroup = zzRoot.querySelector('[data-sc-zz-group="hit"]');
     const hitNested = zzRoot.querySelector('[data-sc-zz-nested="hit"]');
@@ -165,6 +198,19 @@
     let currentKey = "hit";
     let focusedPane = "chat";
     let groupOpen = true;
+
+    function syncSendButton() {
+      if (!sendBtn) return;
+      const hasText = Boolean(input?.value.trim());
+      sendBtn.disabled = !hasText;
+      if (hasText) {
+        sendBtn.dataset.emphasis = "solid";
+        sendBtn.dataset.solid = "primary";
+      } else {
+        delete sendBtn.dataset.emphasis;
+        delete sendBtn.dataset.solid;
+      }
+    }
 
     function buildBubble(text) {
       const wrap = document.createElement("div");
@@ -214,6 +260,75 @@
       return row;
     }
 
+    function buildSummary(item) {
+      const box = document.createElement("div");
+      const head = document.createElement("div");
+      head.className = "penna-chat-activity docs-zz-summary";
+      head.setAttribute("data-clickable", "");
+      head.setAttribute("role", "button");
+      head.setAttribute("tabindex", "0");
+      head.setAttribute("aria-expanded", "false");
+
+      const label = document.createElement("span");
+      label.className = "penna-chat-label";
+      label.textContent = item.label;
+      head.append(label);
+
+      if (item.counts?.length) {
+        const counts = document.createElement("span");
+        counts.className = "penna-chat-counts";
+        for (const entry of item.counts) {
+          const itemEl = document.createElement("span");
+          itemEl.className = "penna-chat-count";
+          const ic = document.createElement("i");
+          ic.dataset.icon = entry.icon;
+          const badge = document.createElement("span");
+          badge.className = "penna-badge";
+          badge.setAttribute("data-penna", "badge");
+          badge.setAttribute("data-size", "small");
+          badge.setAttribute("data-opaque", "");
+          const bt = document.createElement("span");
+          bt.className = "badge-text";
+          bt.textContent = String(entry.count);
+          badge.append(bt);
+          itemEl.append(ic, badge);
+          counts.append(itemEl);
+        }
+        head.append(counts);
+      }
+
+      const chev = document.createElement("span");
+      chev.className = "penna-chat-glyph penna-chat-chevron";
+      const chevIcon = document.createElement("i");
+      chevIcon.dataset.icon = "chevron-right";
+      chev.append(chevIcon);
+      head.append(chev);
+
+      const list = document.createElement("div");
+      list.className = "docs-zz-steps";
+      list.hidden = true;
+      for (const step of item.steps || []) {
+        list.append(buildStep(step));
+      }
+
+      const toggle = () => {
+        const open = list.hidden;
+        list.hidden = !open;
+        head.setAttribute("aria-expanded", String(open));
+        requestAnimationFrame(() => window.pennaKit?.roundAll?.(box));
+      };
+      head.addEventListener("click", toggle);
+      head.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggle();
+        }
+      });
+
+      box.append(head, list);
+      return box;
+    }
+
     function buildSay(text) {
       const p = document.createElement("p");
       p.className = "docs-zz-say";
@@ -226,6 +341,7 @@
       const frag = document.createDocumentFragment();
       for (const item of messages) {
         if (item.role === "user") frag.append(buildBubble(item.text));
+        else if (item.role === "summary") frag.append(buildSummary(item));
         else if (item.role === "step") frag.append(buildStep(item));
         else frag.append(buildSay(item.text));
       }
@@ -295,6 +411,16 @@
       if (chatCwdEl) chatCwdEl.textContent = data.chatCwd;
       if (termNameEl) termNameEl.textContent = data.termName;
       if (termCwdEl) termCwdEl.textContent = data.termCwd;
+      if (branchEl && data.git) branchEl.textContent = data.git.branch;
+      if (filesEl && data.git) filesEl.textContent = data.git.files;
+      if (addEl && data.git) addEl.textContent = data.git.add;
+      if (delEl && data.git) delEl.textContent = data.git.del;
+      if (ringEl && typeof data.usage === "number") {
+        ringEl.style.setProperty("--penna-chat-used", String(data.usage));
+      }
+      if (pctEl && typeof data.usage === "number") {
+        pctEl.textContent = `${Math.round(data.usage * 100)}%`;
+      }
       renderFeed(data.messages);
       if (outEl) {
         outEl.innerHTML = data.termLines.map((line) => `<div>${line}</div>`).join("");
@@ -304,6 +430,12 @@
         setSplit(data.splitDefault);
       }
       setActivePane(pane);
+    }
+
+    function syncChromeToggle() {
+      const collapsed = winEl?.dataset.sidebar === "collapsed";
+      if (chromeBtn) chromeBtn.setAttribute("aria-pressed", String(collapsed));
+      if (chromeLabel) chromeLabel.textContent = collapsed ? "Sidebar" : "Titlebar tabs";
     }
 
     hitChev?.addEventListener("click", (event) => {
@@ -340,6 +472,7 @@
         const collapsed = winEl.dataset.sidebar === "collapsed";
         if (collapsed) delete winEl.dataset.sidebar;
         else winEl.dataset.sidebar = "collapsed";
+        syncChromeToggle();
         requestAnimationFrame(() => window.pennaKit?.roundAll?.(winEl));
       });
     });
@@ -364,8 +497,11 @@
       splitButtons.forEach((btn) => {
         if (!btn.closest(".docs-zz-pacts")) btn.hidden = target === "phone";
       });
+      if (chromeBtn) chromeBtn.hidden = target === "phone";
       requestAnimationFrame(() => window.pennaKit?.roundAll?.(zzRoot));
     });
+
+    input?.addEventListener("input", syncSendButton);
 
     form?.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -377,8 +513,11 @@
       renderFeed(data.messages);
       feedEl.scrollTop = feedEl.scrollHeight;
       input.value = "";
+      syncSendButton();
     });
 
+    syncSendButton();
+    syncChromeToggle();
     selectWindow("hit", "chat");
   }
 
@@ -441,6 +580,18 @@
     const displaysEl = nidusRoot.querySelector("[data-sc-nidus-displays]");
     const permPointer = nidusRoot.querySelector('[data-sc-perm="pointer"]');
     const permClipboard = nidusRoot.querySelector('[data-sc-perm="clipboard"]');
+    const sharingToggle = nidusRoot.querySelector("[data-sc-nidus-sharing]");
+    const barDot = nidusRoot.querySelector("[data-sc-nidus-bar-dot]");
+    const barText = nidusRoot.querySelector("[data-sc-nidus-bar-text]");
+
+    sharingToggle?.addEventListener("change", () => {
+      const on = sharingToggle.getAttribute("aria-checked") === "true";
+      if (barText) barText.textContent = on ? "Ready" : "Paused";
+      if (barDot) {
+        if (on) barDot.dataset.tone = "success";
+        else delete barDot.dataset.tone;
+      }
+    });
 
     function selectHost(key) {
       activeHost = key;

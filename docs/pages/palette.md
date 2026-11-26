@@ -152,7 +152,7 @@ Section headers, kind badges, empty states, inline key hints, and vim mode badge
 ```
 
 - **Navigation**: `Up`, `Down`, `Ctrl+N`, and `Ctrl+P` (`palette_chord`) move selection and wrap; `Enter` runs the picked row; `Alt+Enter` runs the secondary action (`take` or `copy`); `Tab` drills in or completes; `Shift+Tab` steps back.
-- **Footer**: pickers use the fixed four-slot `PaletteKeys` strip (`enter`, `alt-enter`, `tab`, `shift-tab`) so key positions never jump while typing — no arrow or Escape hints.
+- **Footer**: pickers use the fixed four-slot `PaletteKeys` strip (`enter`, `alt-enter`, `tab`, `shift-tab`) so key positions never jump while typing, with no arrow or Escape hints.
 - **Vim**: `PaletteVim` starts in insert mode; `Escape` drops to normal mode (`j`/`k`, `gg`/`G`, `/`, `i`, `a`), and a second `Escape` closes the palette.
 
 ```rust

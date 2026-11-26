@@ -71,7 +71,32 @@
     card.style.translate = `${shift(box.left, box.right, bounds.left, bounds.right)}px ${shift(box.top, box.bottom, bounds.top, bounds.bottom)}px`;
   }
 
+  function wireCap(cap) {
+    let saved = null;
+    cap.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      cap.setPointerCapture(event.pointerId);
+      saved = cap.dataset.penna;
+      cap.dataset.penna = "phone.pill.icon";
+      cap.setAttribute("data-pressed", "");
+      window.pennaKit?.settle(cap);
+    });
+    const release = () => {
+      if (saved === null) return;
+      cap.dataset.penna = saved;
+      saved = null;
+      cap.removeAttribute("data-pressed");
+      window.pennaKit?.settle(cap);
+    };
+    cap.addEventListener("pointerup", release);
+    cap.addEventListener("pointercancel", release);
+  }
+
   function wirePad(pad) {
+    if (pad.classList.contains("penna-key-cap")) {
+      wireCap(pad);
+      return;
+    }
     let origin = null;
     let card = null;
     pad.addEventListener("pointerdown", (event) => {
@@ -171,6 +196,13 @@
       close.style.left = `${at.left - frame.left + at.width / 2 - close.offsetWidth / 2}px`;
       close.style.top = `${at.top - frame.top + at.height / 2 - close.offsetHeight / 2}px`;
     }
+    const copy = stack.querySelector(".penna-stack-anchor");
+    if (copy) {
+      copy.style.left = `${at.left - frame.left}px`;
+      copy.style.top = `${at.top - frame.top}px`;
+      copy.style.width = `${at.width}px`;
+      copy.style.height = `${at.height}px`;
+    }
   }
 
   function stacks() {
@@ -188,6 +220,7 @@
   document.querySelectorAll(".penna-key-row").forEach(wireRow);
   document.fonts.ready.then(() => requestAnimationFrame(settleRows));
   document.querySelectorAll(".penna-key:not(.penna-arrow-pad)").forEach((key) => key.closest(".penna-key-row") || press(key));
+  document.querySelectorAll(".penna-key-cap:not(.penna-arrow-pad)").forEach(wireCap);
   document.querySelectorAll(".penna-arrow-pad").forEach(wirePad);
   addEventListener("resize", () => document.querySelectorAll(".penna-key-row").forEach(edges));
 })();

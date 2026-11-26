@@ -110,95 +110,35 @@
   const win = document.querySelector("[data-install-win]");
   if (!win) return;
 
-  const navRows = [...win.querySelectorAll("[data-win-tab]")];
-  const views = [...win.querySelectorAll("[data-win-view]")];
-  const titleEl = win.querySelector("[data-win-title]");
-  const popHost = win.querySelector("[data-win-popover-host]");
-  const popBtn = win.querySelector("[data-win-popover-btn]");
-  const popPanel = win.querySelector("[data-win-popover]");
-  const iconPick = win.querySelector("[data-win-icon-name]");
-  const modeReadout = win.querySelector("[data-win-mode-readout]");
+  const countEl = win.querySelector("[data-hello-count]");
+  const incBtn = win.querySelector("[data-hello-inc]");
+  const resetBtn = win.querySelector("[data-hello-reset]");
+  let count = 0;
 
-  function syncModeReadout() {
-    if (!modeReadout) return;
-    const mode = document.documentElement.dataset.pennaMode === "light" ? "Light" : "Dark";
-    const glass = document.documentElement.dataset.glass === "none" ? "Solid" : "Liquid glass";
-    modeReadout.textContent = `${mode} · ${glass}`;
-  }
-
-  function setPopOpen(open) {
-    if (!popHost) return;
-    popHost.toggleAttribute("data-open", open);
-    popBtn?.setAttribute("aria-expanded", String(open));
-    if (open && popPanel) {
-      requestAnimationFrame(() => window.pennaKit?.settle?.(popPanel));
+  function syncCount() {
+    if (countEl) {
+      countEl.textContent = count === 1 ? "Clicked 1 time" : `Clicked ${count} times`;
+    }
+    if (resetBtn) {
+      resetBtn.disabled = count === 0;
     }
   }
 
-  function showTab(tab) {
-    setPopOpen(false);
-    navRows.forEach((row) => {
-      const current = row.dataset.winTab === tab;
-      if (current) {
-        row.setAttribute("aria-current", "page");
-        row.dataset.state = "selected";
-      } else {
-        row.removeAttribute("aria-current");
-        delete row.dataset.state;
-      }
-    });
-    views.forEach((view) => {
-      const open = view.dataset.winView === tab;
-      view.hidden = !open;
-      if (open) requestAnimationFrame(() => window.pennaKit?.roundAll?.(view));
-    });
-    const label = navRows.find((row) => row.dataset.winTab === tab)?.dataset.winLabel;
-    if (titleEl && label) titleEl.textContent = label;
-  }
-
-  navRows.forEach((row) => {
-    const pick = () => showTab(row.dataset.winTab);
-    row.addEventListener("click", pick);
-    row.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        pick();
-      }
-    });
+  incBtn?.addEventListener("click", () => {
+    count += 1;
+    syncCount();
   });
 
-  popBtn?.addEventListener("click", (event) => {
-    event.stopPropagation();
-    setPopOpen(!popHost?.hasAttribute("data-open"));
+  resetBtn?.addEventListener("click", () => {
+    count = 0;
+    syncCount();
   });
 
-  win.querySelector("[data-win-toggle-mode]")?.addEventListener("click", () => {
-    pennaKit.choice.mode = pennaKit.choice.mode === "dark" ? "light" : "dark";
-    pennaKit.apply();
+  win.addEventListener("pointermove", (event) => {
+    const rect = win.getBoundingClientRect();
+    win.style.setProperty("--mx", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+    win.style.setProperty("--my", `${((event.clientY - rect.top) / rect.height) * 100}%`);
   });
 
-  win.querySelectorAll("[data-win-icon]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      win.querySelectorAll("[data-win-icon]").forEach((other) => {
-        if (other === btn) other.dataset.state = "current";
-        else delete other.dataset.state;
-      });
-      if (iconPick) iconPick.textContent = `IconName::${btn.dataset.winIcon}`;
-    });
-  });
-
-  document.addEventListener("click", (event) => {
-    if (popHost?.hasAttribute("data-open") && !popHost.contains(event.target)) {
-      setPopOpen(false);
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && popHost?.hasAttribute("data-open")) {
-      setPopOpen(false);
-    }
-  });
-
-  document.addEventListener("penna-theme", syncModeReadout);
-  syncModeReadout();
+  syncCount();
 })();

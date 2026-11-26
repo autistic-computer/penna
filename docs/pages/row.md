@@ -28,7 +28,7 @@ The fill behind a row the app lays out itself: menu options, sidebar entries, th
 ```
 
 1. **Fill**: the look's fill, outline and corners; `.row_height()` sizes the corners, or `.radius(px)` sets a fixed corner on multi-line rows.
-2. **Content**: yours — icon, label and muted `caption` aside spaced `space-8` apart.
+2. **Content**: yours, with icon, label and muted `caption` aside spaced `space-8` apart.
 3. **Fill row**: `.hover_group(group)` draws an inset fill (2 vertical, `space-4` horizontal) behind a taller parent row and stays out of the accessibility tree.
 
 ## States

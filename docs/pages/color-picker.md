@@ -61,5 +61,5 @@ On coarse pointers (`CoarsePointer`), `.presets(chosen, color, presets)` turns t
 | `ColorPicker::new(&state, inherited)` | `button.penna-button[data-compact]` | Compact swatch popover trigger |
 | `.swatch(Pixels)` | `button[data-swatch]` (`--penna-swatch-size`) | Bare circular/rounded swatch |
 | `.label(...)` | `data-label="..."` | Popover title and accessible name |
-| `.presets(chosen, color, el)` | — | Phone field trigger + sheet presets |
+| `.presets(chosen, color, el)` | - | Phone field trigger + sheet presets |
 | `ColorPickerEvent::Change(Option<Hsla>)` | `change` event (`detail: "#rrggbb" \| null`) | Emitted on color pick or clear |

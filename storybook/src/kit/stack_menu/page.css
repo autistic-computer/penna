@@ -32,7 +32,6 @@
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 8px 16px;
 }
 
 .penna-page-lines {
@@ -53,12 +52,4 @@
 
 section:is([data-section="ctrl"], [data-section="alt"]) {
   position: relative;
-}
-
-section:is([data-section="ctrl"], [data-section="alt"]) .stack-keys {
-  z-index: 1;
-}
-
-section:is([data-section="ctrl"], [data-section="alt"]) > .penna-stack {
-  z-index: 0;
 }

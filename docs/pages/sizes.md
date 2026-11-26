@@ -176,7 +176,7 @@ Density moves `control-md` and every list, menu and sidebar row with it. Text an
 
 ## In a line of text
 
-Keycaps and badges take the line height of the text they sit in — 16 in `small`, 18 in `body` — so a line never grows. Icons beside text step with the type size: 12 beside `small`, 14 beside `body`, 16 beside `lead` and `heading`.
+Keycaps and badges take the line height of the text they sit in (16 in `small`, 18 in `body`) so a line never grows. Icons beside text step with the type size: 12 beside `small`, 14 beside `body`, 16 beside `lead` and `heading`.
 
 ```figure uses=label,kbd,badge
 <div class="docs-sz-inline-card" data-penna="panel" data-ground>

@@ -52,12 +52,12 @@
     holdRoot.querySelectorAll("[data-phone-hold-dismiss]").forEach((btn) => {
       btn.addEventListener("click", () => {
         if (modal) modal.setAttribute("data-closed", "");
-        if (readout) readout.textContent = btn.dataset.phoneHoldDismiss || "Dismissed — tap card to reopen";
+        if (readout) readout.textContent = btn.dataset.phoneHoldDismiss || "Dismissed. Tap card to reopen";
       });
     });
 
     modal?.querySelector(".penna-modal-scrim")?.addEventListener("click", () => {
-      if (readout) readout.textContent = "Dismissed — tap card to reopen";
+      if (readout) readout.textContent = "Dismissed. Tap card to reopen";
     });
 
     card?.addEventListener("click", () => openHold("menu"));

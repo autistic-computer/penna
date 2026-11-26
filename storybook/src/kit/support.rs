@@ -2,7 +2,7 @@ use std::{cell::Cell, rc::Rc};
 
 use ala::{
     App, Bounds, IntoElement, KeyDownEvent, Keystroke, Modifiers, MouseButton, MouseDownEvent,
-    MouseMoveEvent, Pixels, PlatformInput, Point, Styled as _, Window, canvas,
+    MouseMoveEvent, MouseUpEvent, Pixels, PlatformInput, Point, Styled as _, Window, canvas, px,
 };
 
 #[derive(Clone, Default)]
@@ -92,6 +92,40 @@ pub fn press(probe: &Probe, button: MouseButton, window: &mut Window, cx: &mut A
                 modifiers: Modifiers::default(),
                 click_count: 1,
                 first_mouse: false,
+            }),
+            cx,
+        );
+    }
+    nudge(8, window);
+}
+
+pub fn click(probe: &Probe, button: MouseButton, window: &mut Window, cx: &mut App) {
+    hover(probe, window, cx);
+    if let Some(position) = probe.center(window) {
+        window.dispatch_event(
+            PlatformInput::MouseDown(MouseDownEvent {
+                button,
+                position,
+                modifiers: Modifiers::default(),
+                click_count: 1,
+                first_mouse: false,
+            }),
+            cx,
+        );
+        window.dispatch_event(
+            PlatformInput::MouseUp(MouseUpEvent {
+                button,
+                position,
+                modifiers: Modifiers::default(),
+                click_count: 1,
+            }),
+            cx,
+        );
+        window.dispatch_event(
+            PlatformInput::MouseMove(MouseMoveEvent {
+                position: Point::new(px(-1.0), px(-1.0)),
+                pressed_button: None,
+                modifiers: Modifiers::default(),
             }),
             cx,
         );

@@ -124,6 +124,6 @@ SettingsStack::titled("Startup")
 | `SettingEntry::new(title)` | `.penna-setting-entry > [data-penna="settings.card"][data-ground]` | Single preference row |
 | `.description(...)` / `.control(...)` | `.penna-setting-description`, trailing control | Secondary copy and widget slot |
 | `settings_navigation(id, sections, sel)` | `nav.penna-settings-nav` | Grouped sidebar navigation |
-| `settings_list_disclosure_header(...)` | — | Collapsible group header (native only) |
-| `settings_scroll_column` / `SettingsFold` | — | Edge-faded column + folding large title |
+| `settings_list_disclosure_header(...)` | - | Collapsible group header (native only) |
+| `settings_scroll_column` / `SettingsFold` | - | Edge-faded column + folding large title |
 | `about::{about_hero, about_build_stack}` | `.penna-about-hero`, `.penna-settings-value` | Standard About hero and metadata |

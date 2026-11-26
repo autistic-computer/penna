@@ -49,6 +49,7 @@ body {
 [data-penna] {
   background:
     linear-gradient(var(--penna-mark), var(--penna-mark)) 0 50% / 3px 16px no-repeat,
+    var(--penna-glow, none),
     var(--penna-fill);
   color: var(--penna-ink);
   border: var(--penna-bw) solid var(--penna-edge);
@@ -472,6 +473,7 @@ select[data-penna] {
 [data-penna][data-emphasis="solid"] {
   background: var(--penna-solid);
   --penna-backdrop: none;
+  --penna-glow: none;
   --penna-rim: 0 0 #0000;
   --penna-glass: 0;
 }

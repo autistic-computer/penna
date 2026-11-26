@@ -30,6 +30,7 @@
   flex: none;
   align-items: center;
   height: 100%;
+  padding-right: var(--penna-space-6);
 }
 
 .penna-title-bar-content {

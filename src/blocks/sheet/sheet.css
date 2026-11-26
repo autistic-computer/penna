@@ -233,6 +233,7 @@
 
 .penna-modal-card[data-penna][data-penna][data-penna][data-penna] {
   background:
+    var(--penna-glow, none),
     linear-gradient(var(--penna-fill), var(--penna-fill)),
     linear-gradient(var(--penna-scrim), var(--penna-scrim)),
     var(--penna-bg);

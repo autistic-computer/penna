@@ -62,7 +62,7 @@
     const page = getComputedStyle(document.documentElement);
     const foreground = channels(page.getPropertyValue("--penna-primary").trim()).join() === channels(page.getPropertyValue("--penna-fg").trim()).join();
     root.querySelectorAll(".penna-notice .penna-button[data-prominent]").forEach((button) => {
-      const carrier = button.closest(".penna-notice-tone");
+      const carrier = button.closest(".penna-notice");
       if (!carrier || !foreground) {
         button.removeAttribute("data-on");
         return;

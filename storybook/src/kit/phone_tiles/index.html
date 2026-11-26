@@ -21,6 +21,68 @@
       <div class="tiles-rows"><div class="penna-touch-group" data-penna="settings.card" data-ground><div class="penna-touch-row" data-penna="phone.row" role="button" data-id="mark-row-connected"><i data-icon="laptop"></i><span class="penna-touch-row-lines"><span data-penna-text>macbook</span></span><span class="penna-touch-row-state"><span class="penna-tone-dot"></span><span data-penna-text>Connected</span></span></div><div class="penna-touch-row" data-penna="phone.row" role="button" data-id="mark-row-waiting"><i data-icon="laptop"></i><span class="penna-touch-row-lines"><span data-penna-text>xps</span></span><span class="penna-touch-row-state" data-tone="warning"><span class="penna-tone-dot" data-tone="warning"></span><span data-penna-text>1 waiting</span></span></div><div class="penna-touch-row" data-penna="phone.row" role="button" data-id="mark-row-failed"><i data-icon="laptop"></i><span class="penna-touch-row-lines"><span data-penna-text>alienware</span></span><span class="penna-touch-row-state" data-tone="danger"><span class="penna-tone-dot" data-tone="danger"></span><span data-penna-text>Failed</span></span></div><div class="penna-touch-row" data-penna="phone.row" role="button" data-id="mark-row-connecting"><i data-icon="laptop"></i><span class="penna-touch-row-lines"><span data-penna-text>thinkpad</span></span><span class="penna-touch-row-state"><i class="penna-touch-spinner" data-icon="loader"></i><span data-penna-text>Connecting</span></span></div><div class="penna-touch-row" data-penna="phone.row" role="button" data-id="mark-row-off"><i data-icon="laptop"></i><span class="penna-touch-row-lines"><span data-penna-text>homelab</span></span><span class="penna-touch-row-state"><span class="penna-tone-dot" data-tone="off"></span><span data-penna-text>Not connected</span></span></div></div></div>
     </section>
 
+    <section data-section="machine-tiles">
+      <div class="story-states" data-columns style="--columns: 2">
+        <div class="story-state">
+          <div class="story-label">waiting</div>
+          <div class="tiles-square"><div class="penna-machine-card" data-penna="phone.card" data-waiting role="button" data-id="machine-tile-waiting" aria-label="macbook, 1 waiting"><div class="penna-machine-top"><span class="tiles-machine-face"><i data-icon="laptop"></i><span class="tiles-machine-badge"><span class="penna-tone-dot" data-tone="warning"></span></span></span><span class="penna-machine-waiting" data-penna-text>1 waiting</span></div><div class="penna-machine-bottom"><span class="penna-machine-label" data-penna-text>macbook</span><div class="penna-machine-line"><span class="tiles-prog-faces"><span class="tiles-prog-face" data-penna="badge"><i data-icon="chat"></i></span><span class="tiles-prog-face" data-penna="badge"><i data-icon="square-terminal"></i></span><span class="tiles-prog-face" data-penna="badge"><i data-icon="globe"></i></span></span></div></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">connected</div>
+          <div class="tiles-square"><div class="penna-machine-card" data-penna="phone.card" role="button" data-id="machine-tile-connected" aria-label="alienware"><div class="penna-machine-top"><span class="tiles-machine-face"><i data-icon="server"></i><span class="tiles-machine-badge"><span class="penna-tone-dot"></span></span></span></div><div class="penna-machine-bottom"><span class="penna-machine-label" data-penna-text>alienware</span><div class="penna-machine-line"><span class="tiles-prog-faces"><span class="tiles-prog-face" data-penna="badge"><i data-icon="square-terminal"></i></span></span></div></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">failed</div>
+          <div class="tiles-square"><div class="penna-machine-card" data-penna="phone.card" role="button" data-id="machine-tile-failed" aria-label="wsl-archlinux, Failed"><div class="penna-machine-top"><span class="tiles-machine-face"><i data-icon="server"></i><span class="tiles-machine-badge"><span class="penna-tone-dot" data-tone="danger"></span></span></span></div><div class="penna-machine-bottom"><span class="penna-machine-label" data-penna-text>wsl-archlinux</span><div class="penna-machine-line"><span class="tiles-card-state" data-tone="danger" data-penna-text>Failed</span></div></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">offline</div>
+          <div class="tiles-square"><div class="penna-machine-card" data-penna="phone.card" data-dimmed role="button" data-id="machine-tile-offline" aria-label="win-desktop, Not connected"><div class="penna-machine-top"><span class="tiles-machine-face"><i data-icon="server"></i><span class="tiles-machine-badge"><span class="penna-tone-dot" data-tone="off"></span></span></span></div><div class="penna-machine-bottom"><span class="penna-machine-label" data-penna-text>win-desktop</span><div class="penna-machine-line"><span class="tiles-card-state" data-penna-text>Not connected</span></div></div><span class="penna-press"></span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section data-section="window-cards">
+      <div class="story-states" data-columns style="--columns: 2">
+        <div class="story-state">
+          <div class="story-label">row</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" role="button" data-id="window-card-row" aria-label="Claude Code, zebrilus · main"><div class="penna-window-row"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="chat"></i></span></span><div class="penna-window-row-copy"><span class="penna-window-row-title" data-penna-text>Claude Code</span><div class="penna-window-row-detail"><span data-penna-text>zebrilus · main</span></div></div><i data-icon="chevron-right"></i></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">waiting</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" data-waiting role="button" data-id="window-card-waiting" aria-label="Make the pill menu offer New chat, Needs approval"><div class="penna-window-row"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="chat"></i></span></span><div class="penna-window-row-copy"><span class="penna-window-row-title" data-penna-text>Make the pill menu offer New chat</span><div class="penna-window-row-detail"><span class="tiles-card-state" data-tone="warning" data-penna-text>Needs approval</span></div></div><i data-icon="chevron-right"></i></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">working</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" role="button" data-id="window-card-working" aria-label="Fix pane stack hit testing, Moving the occlusion onto the card"><div class="penna-window-row"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="chat"></i></span></span><div class="penna-window-row-copy"><span class="penna-window-row-title" data-penna-text>Fix pane stack hit testing</span><div class="penna-window-row-detail"><i class="penna-touch-spinner" data-icon="loader"></i><span data-penna-text>Moving the occlusion onto the card</span></div></div><i data-icon="chevron-right"></i></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">page</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" role="button" data-id="window-card-page" aria-label="Phone machines, 127.0.0.1:8090"><div class="penna-window-row"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="globe"></i></span></span><div class="penna-window-row-copy"><span class="penna-window-row-title" data-penna-text>Phone machines</span><div class="penna-window-row-detail"><span data-penna-text>127.0.0.1:8090</span></div></div><i data-icon="chevron-right"></i></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">tail</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" role="button" data-id="window-card-tail" aria-label="cargo test"><div class="penna-window-tail-card"><div class="penna-window-tail-head"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="square-terminal"></i></span></span><span class="penna-window-row-title" data-penna-text>cargo test</span></div><div class="penna-window-tails"><pre class="penna-window-tail">running 14 tests
+test pill::menu_order ... ok
+test result: ok. 14 passed
+&gt; </pre></div></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">two tails</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" role="button" data-id="window-card-split" aria-label="bash"><div class="penna-window-tail-card"><div class="penna-window-tail-head"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="square-terminal"></i></span><span class="tiles-win-face" data-penna="badge"><i data-icon="square-terminal"></i></span></span><span class="penna-window-row-title" data-penna-text>bash</span></div><div class="penna-window-tails"><pre class="penna-window-tail">&gt; ls
+AGENTS.md  CLAUDE.md  Cargo.lock
+Cargo.toml Justfile   clients
+&gt; </pre><span class="tiles-tail-sep"></span><pre class="penna-window-tail">~/dev/zebrilus main
+&gt; </pre></div></div><span class="penna-press"></span></div></div>
+        </div>
+        <div class="story-state">
+          <div class="story-label">failed</div>
+          <div class="tiles-wide"><div class="penna-window-card" data-penna="phone.card" role="button" data-id="window-card-failed" aria-label="just release, Exit 1"><div class="penna-window-tail-card"><div class="penna-window-tail-head"><span class="tiles-win-faces"><span class="tiles-win-face" data-penna="badge"><i data-icon="square-terminal"></i></span></span><span class="penna-window-row-title" data-penna-text>just release</span><span class="tiles-card-state" data-strong data-tone="danger" data-penna-text>Exit 1</span></div><div class="penna-window-tails"><pre class="penna-window-tail">error: could not compile `zz-app`
+&gt; </pre></div></div><span class="penna-press"></span></div></div>
+        </div>
+      </div>
+    </section>
+
     <section data-section="machines">
       <div class="story-states" data-columns style="--columns: 2">
         <div class="story-state">

@@ -40,9 +40,11 @@
   const swatchRadius = (element) => {
     const radius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--penna-control-radius")) || 0;
     const size = Math.min(element.offsetWidth, element.offsetHeight);
-    if (radius > FULL) return size / 2;
+    if (radius > FULL) return [size / 2, 1];
     const cap = size * CORNER;
-    return cap > 0 ? cap * Math.tanh(radius / cap) : 0;
+    const raw = cap > 0 ? cap * Math.tanh(radius / cap) : 0;
+    const k = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--penna-window-k")) || 1;
+    return window.pennaKit?.apparentCorner(raw, size / 2, k) ?? [raw, k];
   };
 
   const fieldRadius = (element) => {
@@ -67,16 +69,6 @@
 
   const pickers = new Set();
   const closers = new Set();
-
-  const edge = () => {
-    const probe = document.createElement("i");
-    probe.dataset.penna = "card";
-    probe.hidden = true;
-    document.body.append(probe);
-    const width = parseFloat(getComputedStyle(probe).getPropertyValue("--penna-bw")) || 0;
-    probe.remove();
-    document.documentElement.style.setProperty("--penna-color-picker-edge", `${width}px`);
-  };
 
   function panel(picker) {
     const label = picker.dataset.label;
@@ -274,7 +266,11 @@
     closers.add(close);
 
     const settle = () => {
-      if (swatch) swatch.style.setProperty("--penna-swatch-r", `${swatchRadius(swatch)}px`);
+      if (swatch) {
+        const [r, k] = swatchRadius(swatch);
+        swatch.style.setProperty("--penna-swatch-r", `${r}px`);
+        swatch.style.setProperty("--penna-swatch-k", `${k}`);
+      }
       paint();
     };
     pickers.add(settle);
@@ -283,7 +279,6 @@
   }
 
   const settleAll = () => {
-    edge();
     pickers.forEach((settle) => settle());
   };
 

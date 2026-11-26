@@ -218,6 +218,6 @@ Under `.touch(true)`, ticks and axis labels step up to `body`, the legend to `to
 | `Chart::new(id, kind, labels, series)` | `.penna-chart` | Bar or line chart, up to 4 series |
 | `ChartKind::Bar`, `ChartKind::Line` | `.penna-chart-bars`, `svg.penna-chart-svg` | Plot style |
 | `Series::new(name, values)` | `--penna-series-0..3`, `data-series` | One named series of `f64` |
-| `ChartCursor` (`step`, `home`, `end`) | — | Clamped keyboard index cursor across data bands |
+| `ChartCursor` (`step`, `home`, `end`) | - | Clamped keyboard index cursor across data bands |
 | `.touch(true)` | `data-touch` | `body` ticks and labels, `touch-small` legend, 6-label cap |
 | `MAX_SERIES` | 4 | Maximum series drawn |

@@ -64,8 +64,8 @@ TitleBar::new().child(
 | Rust (`penna::TitleBar`, `blocks::title_bar`) | HTML (`uses=title_bar`) | Role |
 | --- | --- | --- |
 | `TitleBar::new()` | `.penna-title-bar[data-penna="titlebar"][role="banner"]` | Window title bar strip |
-| `TitleBar::title_bar_options(height)` | — | `ala` window creation options |
-| `macos_traffic_light_clearance(cx)` | — | Leading clearance on macOS |
+| `TitleBar::title_bar_options(height)` | - | `ala` window creation options |
+| `macos_traffic_light_clearance(cx)` | - | Leading clearance on macOS |
 | `WindowControls::new()` | `.penna-title-bar-controls` | Platform min/max/close buttons (native only) |
-| `.on_close_window(f)` | — | Custom close hook on Linux CSD |
-| `draws_window_controls(window)` | — | True when client-side buttons are painted |
+| `.on_close_window(f)` | - | Custom close hook on Linux CSD |
+| `draws_window_controls(window)` | - | True when client-side buttons are painted |

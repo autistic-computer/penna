@@ -4,9 +4,9 @@
   "steps": [
     { "name": "press-pill", "section": "pill", "press": { "selector": ".penna-compact-pill" } },
     { "name": "press-chip", "section": "pill-menu", "press": "stack-chip-rename" },
-    { "name": "press-key", "section": "keys", "press": { "selector": ".penna-key", "nth": 3 } },
+    { "name": "press-key", "section": "keys", "press": { "selector": ".penna-key-cap", "nth": 3 } },
     { "name": "press-arrows", "section": "keys", "press": { "selector": ".penna-arrow-pad" } },
-    { "name": "press-row-key", "section": "key-row", "press": { "selector": ".penna-key-row .penna-key", "nth": 3 } },
+    { "name": "press-row-key", "section": "key-row", "press": { "selector": ".penna-key-bar .penna-key-cap", "nth": 3 } },
     { "name": "hover-binding", "section": "bindings", "hover": { "selector": ".penna-which-key-list-row", "nth": 2 } },
     { "name": "press-binding", "section": "bindings", "press": { "selector": ".penna-which-key-list-row", "nth": 2 } },
     { "name": "hover-settings", "section": "bento", "hover": "bento-settings" },

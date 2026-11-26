@@ -102,6 +102,8 @@
 }
 
 .penna-key-slot {
+  width: 64px;
+  height: 64px;
   padding: var(--penna-space-8);
   border-radius: var(--penna-radius);
   corner-shape: superellipse(var(--penna-window-k));
@@ -997,8 +999,9 @@
   display: flex;
   flex: 1 1 0;
   align-items: center;
-  justify-content: center;
+  justify-content: safe center;
   min-width: 0;
+  width: 100%;
   height: 48px;
   margin: 0;
   padding: 0;
@@ -1009,6 +1012,15 @@
   --penna-icon-size: 20px;
   --penna-inside: 4px;
   --penna-inside-rows: 56px;
+}
+
+.penna-stack > .penna-stack-anchor[data-penna] {
+  position: absolute;
+  pointer-events: auto;
+}
+
+.penna-key-cap[data-penna].penna-arrow-pad {
+  --penna-icon-size: 22px;
 }
 
 .penna-key-disc[data-penna] {

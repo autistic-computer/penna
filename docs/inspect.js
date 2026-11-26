@@ -202,7 +202,7 @@
     const fill = readToken(cs, "--penna-fill", cs.backgroundColor);
     const ink = readToken(cs, "--penna-ink", cs.color);
     const radius = readToken(cs, "--penna-r", cs.borderRadius || "0px");
-    const smoothing = readToken(cs, "--penna-k", "—");
+    const smoothing = readToken(cs, "--penna-k", "-");
     const glass = readToken(cs, "--penna-glass", "none");
     const tone =
       el.getAttribute("data-tone") ||

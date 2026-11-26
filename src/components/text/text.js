@@ -37,6 +37,7 @@
     const end = text.trimEnd().length;
     let at = 0;
     const spans = [];
+    const strong = getComputedStyle(document.documentElement).getPropertyValue("--penna-text-read-h1-weight").trim() || "600";
     for (const part of parts) {
       const from = Math.max(at, lead) - at;
       const to = Math.min(at + part.text.length, end) - at;
@@ -45,17 +46,13 @@
       const span = document.createElement("span");
       span.style.fontFamily = part.family ?? family;
       span.style.fontSize = size;
-      span.style.fontWeight = part.bold ? "700" : "400";
+      span.style.fontWeight = part.bold ? strong : "400";
       span.style.fontStyle = part.italic ? "italic" : "normal";
       span.textContent = part.text.slice(from, to);
       spans.push(span);
     }
     probe.replaceChildren(...spans);
-    const codePad = [...cell.querySelectorAll("code")].reduce((sum, code) => {
-      const box = getComputedStyle(code);
-      return sum + (parseFloat(box.paddingLeft) || 0) + (parseFloat(box.paddingRight) || 0);
-    }, 0);
-    return probe.getBoundingClientRect().width + codePad;
+    return probe.getBoundingClientRect().width;
   }
 
   function sizeTable(table) {
@@ -131,6 +128,15 @@
 
   const TEXT = ".penna-md :is(p, h1, h2, h3, h4, h5, h6, .md-prefix, .md-cell)";
 
+  function hasBodyText(block) {
+    const walk = (node) => {
+      if (node.nodeType === Node.TEXT_NODE) return node.data.length > 0;
+      if (node.nodeType !== Node.ELEMENT_NODE || node.matches("code")) return false;
+      return [...node.childNodes].some(walk);
+    };
+    return [...block.childNodes].some(walk);
+  }
+
   function baselines(root = document) {
     metrics.clear();
     const blocks = [...root.querySelectorAll(TEXT)];
@@ -139,17 +145,23 @@
       const style = getComputedStyle(block);
       const size = parseFloat(style.fontSize);
       const line = parseFloat(style.lineHeight);
+      const codes = [...block.querySelectorAll("code")];
       let { ascent, descent } = fontMetrics(style.fontFamily);
-      const code = block.querySelector("code");
-      if (code) {
-        const mono = fontMetrics(getComputedStyle(code).fontFamily);
-        ascent = Math.max(ascent, mono.ascent);
-        descent = Math.max(descent, mono.descent);
+      let mono = null;
+      if (codes.length) {
+        mono = fontMetrics(getComputedStyle(codes[0]).fontFamily);
+        if (hasBodyText(block)) {
+          ascent = Math.max(ascent, mono.ascent);
+          descent = Math.max(descent, mono.descent);
+        } else {
+          ascent = mono.ascent;
+          descent = mono.descent;
+        }
       }
       const mark = document.createElement("span");
       mark.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
       block.prepend(mark);
-      return { block, size, line, ascent, descent, mark };
+      return { block, size, line, ascent, descent, mark, codes, mono };
     });
     plans.forEach((plan) => {
       const { block, size, line, ascent, descent, mark } = plan;
@@ -160,22 +172,29 @@
       const drawn = device(mark.getBoundingClientRect().top + scrollY);
       plan.shift = target - drawn;
     });
-    plans.forEach(({ block, mark, shift }) => {
+    plans.forEach(({ block, mark, shift, codes, mono, size, ascent, descent }) => {
       mark.remove();
       block.style.setProperty("top", `${shift}px`);
       block.style.setProperty("--md-shift", `${shift}px`);
+      if (mono) {
+        const pt = (1.5 + Math.max(ascent - mono.ascent, 0) * size).toFixed(2);
+        const pb = (1.5 + Math.max(descent - mono.descent, 0) * size).toFixed(2);
+        codes.forEach((code) => {
+          code.style.setProperty("--md-code-pt", `${pt}px`);
+          code.style.setProperty("--md-code-pb", `${pb}px`);
+        });
+      }
     });
   }
 
   const INLINE_CODE_RADIUS = 4;
 
   function shape(root = document) {
-    const fraction = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--penna-corner-fraction")) || 0.45;
+    const themeRadius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--penna-radius")) || 0;
+    const radius = Math.min(themeRadius, INLINE_CODE_RADIUS);
     root.querySelectorAll(".penna-md :not(pre) > code, .penna-md :not(pre) > :is(strong, em, a) > code").forEach((code) => {
       const rect = code.getClientRects()[0];
       if (!rect) return;
-      const cap = Math.min(rect.width, rect.height) * fraction;
-      const radius = cap * Math.tanh(INLINE_CODE_RADIUS / cap);
       const [box, k] = window.pennaKit?.drawnCorner(radius, rect.width, rect.height) ?? [radius, 1];
       code.style.setProperty("--md-r", `${box.toFixed(2)}px`);
       code.style.setProperty("--md-k", k.toFixed(3));
@@ -197,10 +216,10 @@
 
   function settle() {
     document.querySelectorAll(".penna-md .md-table").forEach(sizeTable);
+    baselines();
     shape();
     shapeChecks();
     pennaKit.ceilText(document, ".penna-md .md-prefix");
-    baselines();
   }
 
   document.addEventListener("click", (event) => {

@@ -70,7 +70,7 @@ A phone screen is built from phone components, sized for a thumb from the start.
       <div class="penna-modal-scrim"></div>
       <div class="penna-modal-area">
         <div class="penna-modal-card" data-penna="drawer" data-phone-hold-view="menu">
-          <div class="penna-modal-head"><span data-penna-text>Fix hit testing</span><button class="penna-sheet-disc" type="button" data-sheet-close data-phone-hold-dismiss="Dismissed — tap card to reopen" aria-label="Close"><span data-penna="button"><i data-icon="xmark"></i></span></button></div>
+          <div class="penna-modal-head"><span data-penna-text>Fix hit testing</span><button class="penna-sheet-disc" type="button" data-sheet-close data-phone-hold-dismiss="Dismissed. Tap card to reopen" aria-label="Close"><span data-penna="button"><i data-icon="xmark"></i></span></button></div>
           <div class="penna-sheet-groups" data-menu>
             <div class="penna-touch-group" data-penna="settings.card" data-ruled data-ground>
               <div class="penna-touch-row" data-penna="phone.row" role="button" tabindex="0" data-phone-hold-open="rename"><i data-icon="pencil"></i><span class="penna-touch-row-lines"><span>Rename</span></span></div>
@@ -83,7 +83,7 @@ A phone screen is built from phone components, sized for a thumb from the start.
           <label class="penna-input" data-penna="field"><input value="Fix hit testing" aria-label="Window name" /></label>
           <div class="penna-modal-bar">
             <button class="penna-button" data-penna="button" type="button" data-phone-hold-open="menu"><span class="penna-label" data-penna-text>Cancel</span></button>
-            <button class="penna-button" data-penna="button" data-tone="primary" data-prominent type="button" data-phone-hold-dismiss="Renamed — tap card to reopen"><span class="penna-label" data-penna-text>Rename</span></button>
+            <button class="penna-button" data-penna="button" data-tone="primary" data-prominent type="button" data-phone-hold-dismiss="Renamed. Tap card to reopen"><span class="penna-label" data-penna-text>Rename</span></button>
           </div>
         </div>
         <div class="penna-modal-card" data-penna="drawer" data-phone-hold-view="close" hidden>
@@ -91,7 +91,7 @@ A phone screen is built from phone components, sized for a thumb from the start.
           <p class="penna-modal-detail">1 terminal pane will stop.</p>
           <div class="penna-modal-bar">
             <button class="penna-button" data-penna="button" type="button" data-phone-hold-open="menu"><span class="penna-label" data-penna-text>Cancel</span></button>
-            <button class="penna-button" data-penna="button" data-tone="danger" data-prominent type="button" data-phone-hold-dismiss="Closed — tap card to reopen"><span class="penna-label" data-penna-text>Close</span></button>
+            <button class="penna-button" data-penna="button" data-tone="danger" data-prominent type="button" data-phone-hold-dismiss="Closed. Tap card to reopen"><span class="penna-label" data-penna-text>Close</span></button>
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ A screen of things is the same at every level: the large title, then tiles or ca
 
 ## Bar and strip
 
-The bottom bar splits navigation from creation: a 56 floating strip pill — `pill_strip` — beside a 56 action disc, topped by a 28 by 4 grab handle — `pill_handle` — for lifting back one level. Inside the strip, every sibling sits as a 48 mark slot and the open item expands into a capsule showing its title and status line; swiping across the strip pages smoothly between siblings.
+The bottom bar splits navigation from creation: a 56 floating strip pill (`pill_strip`) beside a 56 action disc, topped by a 28 by 4 grab handle (`pill_handle`) for lifting back one level. Inside the strip, every sibling sits as a 48 mark slot and the open item expands into a capsule showing its title and status line; swiping across the strip pages smoothly between siblings.
 
 ```figure uses=compact,touch,button,label
 <div class="docs-ph-bar-section">
@@ -358,7 +358,7 @@ No header: the content runs to the edges and the bottom strip is the one handle.
 
 ## Terminal
 
-The key row takes the bar's place while the keyboard is up: one 56 floating pill of four evenly shared 48 keys — `esc`, `tab`, `ctrl`, `alt` — beside two 56 floating discs 8 apart: the thumbstick arrow pad and done to drop the keyboard. Keys rest bare on the pill as `phone.key` and take the `phone.pill.icon` wash while pressed or latched. Holding `ctrl` or `alt` opens its chords as a stack menu; dragging the arrow disc sends arrows in any direction without raising a second overlay.
+The key row takes the bar's place while the keyboard is up: one 56 floating pill of four evenly shared 48 keys (`esc`, `tab`, `ctrl`, `alt`) beside two 56 floating discs 8 apart: the thumbstick arrow pad and done to drop the keyboard. Keys rest bare on the pill as `phone.key` and take the `phone.pill.icon` wash while pressed or latched. Holding `ctrl` or `alt` opens its chords as a stack menu; dragging the arrow disc sends arrows in any direction without raising a second overlay.
 
 ```figure uses=touch,button,label
 <div class="docs-ph-term-stack">
@@ -432,7 +432,7 @@ The key row takes the bar's place while the keyboard is up: one 56 floating pill
 </div>
 ```
 
-Find takes the bar's place by the same rule — `phone_find_field`, or `phone_field_at_rest` when the keyboard is dismissed — a 56 field with a 44 close, the query, the count as its value, and previous and next as 44 buttons. A tap on a link opens a sheet titled with the link, with Open in a browser pane, Open on this phone and Copy. Scrolled back, a 44 jump to bottom floats over the bar.
+Find takes the bar's place by the same rule (`phone_find_field`, or `phone_field_at_rest` when the keyboard is dismissed): a 56 field with a 44 close, the query, the count as its value, and previous and next as 44 buttons. A tap on a link opens a sheet titled with the link, with Open in a browser pane, Open on this phone and Copy. Scrolled back, a 44 jump to bottom floats over the bar.
 
 ## Browser
 
@@ -498,7 +498,7 @@ No header and no bar: the page runs to the edges and the bottom strip shows the 
 </div>
 ```
 
-Picking the address raises the keyboard and the address field takes the bar's place, like find: a 56 field with a 44 close, the address all selected, and a 44 clear; go is on the keyboard. Suggestions — `phone_suggestions` — sit as two-line rows just above it, the best nearest. A page loading draws a 2 line in the accent along its top edge, and Reload turns to Stop. When a field on the page has the keyboard, the bar hides and nothing rides it.
+Picking the address raises the keyboard and the address field takes the bar's place, like find: a 56 field with a 44 close, the address all selected, and a 44 clear; go is on the keyboard. Suggestions (`phone_suggestions`) sit as two-line rows just above it, the best nearest. A page loading draws a 2 line in the accent along its top edge, and Reload turns to Stop. When a field on the page has the keyboard, the bar hides and nothing rides it.
 
 ## Surfaces
 

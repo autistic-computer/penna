@@ -1,6 +1,6 @@
 # Showcase
 
-Real screens composed from penna's components and blocks — the terminal multiplexer (`zz`) across desktop and phone, the multi-machine desk manager (`nidus`), and live GPU-to-HTML parity measured from every storybook baseline.
+Real screens composed from penna's components and blocks: the terminal multiplexer (`zz`) across desktop and phone, the multi-machine desk manager (`nidus`), and live GPU-to-HTML parity measured from every storybook baseline.
 
 ```figure uses=badge,card,chat,chip,compact,dock,icon,input,inspector,kbd,label,list,notice,panel,progress,row,segmented,settings,sidebar,spinner,switch,tab,tile,title_bar,touch
 <div class="docs-sc-toolbar" data-penna="card" data-ground data-docs-showcase>
@@ -34,7 +34,7 @@ Real screens composed from penna's components and blocks — the terminal multip
 
 ## zz workspace
 
-Switch windows from the flat sidebar or titlebar tabs, expand multi-pane rows, toggle the sidebar or split pane, send a message in the composer, or flip to the 390 px phone view.
+Switch windows from the flat sidebar, collapse the sidebar to reveal the compact titlebar tab strip, expand multi-pane rows or turn summaries, send a message in the composer, or flip to the 390 px phone view.
 
 ```figure uses=badge,card,chat,chip,compact,icon,input,label,list,panel,row,segmented,sidebar,spinner,tab,tile,title_bar,touch
 <div class="docs-sc-section" data-sc-zz>
@@ -46,12 +46,15 @@ Switch windows from the flat sidebar or titlebar tabs, expand multi-pane rows, t
         <span class="penna-segment" role="radio" aria-checked="false"><span class="penna-label" data-penna-text>Phone</span></span>
       </div>
     </div>
-    <button class="penna-button" data-penna="button.quiet" data-size="small" type="button" data-sc-zz-split aria-pressed="true"><i data-icon="panel-right"></i><span class="penna-label" data-penna-text>Split pane</span></button>
+    <div class="docs-sc-bar-actions">
+      <button class="penna-button" data-penna="button.quiet" data-size="small" type="button" data-sc-zz-side-toggle data-sc-zz-chrome-btn aria-pressed="false"><i data-icon="panel-left"></i><span class="penna-label" data-penna-text data-sc-zz-chrome-label>Titlebar tabs</span></button>
+      <button class="penna-button" data-penna="button.quiet" data-size="small" type="button" data-sc-zz-split aria-pressed="true"><i data-icon="panel-right"></i><span class="penna-label" data-penna-text>Split pane</span></button>
+    </div>
   </div>
 
   <div class="docs-sc-zz-desktop" data-sc-zz-pane="desktop">
     <div class="penna-window penna-gaps docs-zz-win" data-penna="window" data-ground data-sc-zz-win>
-      <div class="penna-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="penna-lights docs-zz-lights" aria-hidden="true"><i></i><i></i><i></i></div>
       <nav class="docs-zz-side" data-penna="sidebar" data-ground aria-label="zz sessions">
         <div class="penna-strip docs-zz-strip">
           <button class="docs-zz-chrome" data-penna="chrome.button" type="button" aria-label="Session tree" title="Session tree"><i data-icon="chat"></i></button>
@@ -143,24 +146,34 @@ Switch windows from the flat sidebar or titlebar tabs, expand multi-pane rows, t
               <div class="docs-zz-pacts">
                 <button class="docs-zz-pact" data-penna="icon-button.bar" type="button" aria-label="Split right" data-sc-zz-split><i data-icon="panel-right"></i></button>
                 <button class="docs-zz-pact" data-penna="icon-button.bar" type="button" aria-label="Float pane"><i data-icon="picture-in-picture"></i></button>
-                <button class="docs-zz-pact" data-penna="icon-button.bar" type="button" aria-label="Close pane"><i data-icon="xmark"></i></button>
+                <button class="docs-zz-pact" data-penna="icon-button.bar" type="button" aria-label="Pane actions"><i data-icon="ellipsis"></i></button>
               </div>
             </div>
           </div>
           <div class="docs-zz-thread" data-sc-zz-feed></div>
-          <form class="docs-zz-dock" data-sc-zz-form>
-            <div class="penna-chat-composer">
-              <div class="penna-chat-field input-chrome" data-penna="field.composer">
-                <button class="penna-button" data-penna="button.send" data-shape="icon" type="button" aria-label="Mention a file"><i data-icon="plus"></i></button>
-                <input class="docs-zz-input" type="text" placeholder="Message agent…" aria-label="Message agent" data-sc-zz-input />
-                <span class="penna-chat-meter" role="progressbar" aria-label="34% of context used" style="--penna-chat-used: 0.34"><span></span></span>
-                <button class="penna-button" data-penna="button.send" data-shape="icon" data-emphasis="solid" data-solid="primary" type="submit" aria-label="Send message"><i data-icon="arrow-up"></i></button>
+          <form class="penna-chat-frame docs-zz-dock" data-sc-zz-form>
+            <div class="penna-chat-frame-top docs-zz-dock-top">
+              <div class="penna-chat-composer">
+                <span class="input-underlay" data-penna="field.composer"></span>
+                <div class="penna-chat-field input-chrome" data-penna="field.composer">
+                  <button class="penna-button" data-penna="button.send" data-shape="icon" type="button" aria-label="Mention a file"><i data-icon="plus"></i></button>
+                  <input class="docs-zz-input" type="text" placeholder="Message…" aria-label="Message" data-sc-zz-input />
+                  <button class="penna-button" data-penna="button.send" data-shape="icon" type="submit" disabled aria-label="Send message" data-sc-zz-send><i data-icon="arrow-up"></i></button>
+                </div>
               </div>
             </div>
-            <div class="docs-zz-dock-foot">
-              <span class="docs-zz-grow"></span>
-              <span class="penna-chip docs-zz-mchip" data-penna="chip" data-size="xsmall"><i data-icon="circle-user"></i><span class="penna-chip-label" data-penna-text>Ask</span></span>
-              <span class="penna-chip docs-zz-mchip" data-penna="chip" data-size="xsmall"><span class="penna-chip-label" data-penna-text>Reasoning</span><span class="docs-zz-mchip-dim">High</span><i data-icon="chevron-down"></i></span>
+            <div class="penna-chat-frame-foot docs-zz-dock-foot">
+              <div class="docs-zz-git" data-sc-zz-git>
+                <i data-icon="git-branch"></i>
+                <span class="docs-zz-git-branch" data-sc-zz-branch>main</span>
+                <span class="docs-zz-git-files" data-sc-zz-files>2 files</span>
+                <span class="docs-zz-git-add" data-sc-zz-add>+14</span>
+                <span class="docs-zz-git-del" data-sc-zz-del>-5</span>
+              </div>
+              <div class="docs-zz-controls">
+                <button class="penna-button penna-chat-chrome docs-zz-usage" data-penna="button.quiet" data-size="small" type="button" aria-label="Context usage"><span class="docs-zz-ring" data-sc-zz-ring style="--penna-chat-used: 0.34" aria-hidden="true"></span><span class="docs-zz-pct" data-sc-zz-pct>34%</span></button>
+                <button class="penna-button penna-chat-chrome docs-zz-model" data-penna="button.quiet" data-size="small" type="button"><span class="penna-label" data-penna-text>Model</span><span class="docs-zz-effort">High</span><i data-icon="chevron-down"></i></button>
+              </div>
             </div>
           </form>
         </section>
@@ -171,7 +184,7 @@ Switch windows from the flat sidebar or titlebar tabs, expand multi-pane rows, t
               <div class="docs-zz-pbtn" data-penna="button.title"><i data-icon="square-terminal"></i><span class="docs-zz-pname" data-sc-zz-term-name>cargo test</span><span class="docs-zz-pcwd" data-sc-zz-term-cwd>~/dev/penna</span></div>
               <span class="docs-zz-grow"></span>
               <div class="docs-zz-pacts">
-                <button class="docs-zz-pact" data-penna="icon-button.bar" type="button" aria-label="Pane menu"><i data-icon="ellipsis"></i></button>
+                <button class="docs-zz-pact" data-penna="icon-button.bar" type="button" aria-label="Pane actions"><i data-icon="ellipsis"></i></button>
               </div>
             </div>
           </div>
@@ -240,6 +253,15 @@ Click any display tile on the arrangement canvas or a nearby host in the dock to
 
 ```figure uses=chip,dock,icon,inspector,label,settings,switch,tile
 <div class="docs-sc-nidus" data-sc-nidus>
+  <header class="docs-sc-nidus-bar" data-penna="titlebar" data-ground>
+    <div class="docs-install-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+    <span class="penna-chip docs-sc-nidus-pill" data-penna="chip" data-size="small"><i class="penna-dot" data-tone="success" data-sc-nidus-bar-dot></i><span class="penna-chip-label" data-sc-nidus-bar-text>Ready</span></span>
+    <div class="docs-sc-nidus-bar-end">
+      <span class="penna-type" data-type="small" data-muted>Sharing</span>
+      <button class="penna-toggle" role="switch" data-size="small" aria-checked="true" aria-label="Sharing" type="button" data-sc-nidus-sharing></button>
+      <button class="docs-zz-chrome" data-penna="chrome.button" type="button" aria-label="Settings"><i data-icon="settings"></i></button>
+    </div>
+  </header>
   <div class="docs-sc-nidus-main">
     <div class="docs-sc-desk">
       <div class="docs-sc-desk-label"><span class="penna-type" data-type="caption" data-muted data-penna-text>Desk arrangement · QUIC mesh</span></div>
